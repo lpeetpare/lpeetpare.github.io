@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Down the Rabbit Hole</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="/static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/clean-blog.css" rel="stylesheet">
+
+	<!-- MathJax link -->
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+
+	<!-- For in-line math -->
+	<script type="text/x-mathjax-config">
+	MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+	</script>
+
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">Down the Rabbit Hole</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          Menu
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="about">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="contact_alt">Contact</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="masthead" style="background-image: url('/static/img/entropy/1book4.jpg')">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <div class="post-heading">
+              <h1>DeepMind and Graph Networks (Part I) </h1>
+              <span class="meta">Posted by
+                <a href="#">Atai Akunov</a>
+                on February 15, 2019</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Post Content -->
+    <article>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+              <p>In 2018, DeepMind released a framework that aims to provide a guideline on how to do deep learning on data represented in a graph form. Further in this article, we will cover some basic
+                  definitions and procedures outlined in the paper. This article is focused on two items in particular: (1) the definition of a graph used in the framework, and (2) the function named GN block
+                  which inputs a graph and outputs an updated graph. I hope to provide a historical context, differences between 'Euclidian' and graph data, and the actual implementation in the following parts.
+                </p>
+
+            <h2 class="section-heading">Graph Definition</h2>
+
+      
+
+            <p>DeepMind’s framework imposes a few structural characteristics to its graph definition.
+              Namely, any graph $G$ within the framework must be a directed, attributed multi-graph with an
+              overarching global attribute $\boldsymbol{u}$. Here's what these terms actually mean: <br><br>
+              
+              <a href="#">
+                <img class="img-fluid" src="/static/img/graph_networks/graph-explanation.png" alt="DeepMind graph explanation" style="height: auto; width: 750px;">
+              </a>
+              <span class="caption text-muted">Graph terminology</span>
+              
+              Let's unpack the definition of a graph into its symbolic pieces. <br><br>
+
+              <a href="#">
+                <img class="img-fluid" src="/static/img/graph_networks/graph.png" alt="DeepMind graph" style="height: auto; width: 750px;">
+              </a>
+              <span class="caption text-muted">DeepMind's graph structure</span>
+
+              Structurally, a graph is a 3-tuple $G = (\boldsymbol{u}, V, E)$, where
+
+              <ul>
+                <li>$\boldsymbol{u}$ is a global attribute often represented as a scalar or a vector</li>
+                <li>$V = \{v_i\}_{i = 1:N^v}$ is the set of all nodes, where </li>
+                  <ul>
+                    <li>$|V| = N^v$ is the cardinality of $V$</li>
+                    <li>A node $v_i$ is either a sender noder $v_{s_k}$ or a receiver node $v_{r_k}$ in
+                      relation to an edge $k$
+                    </li>
+                  </ul>
+                <li>$E = {(\boldsymbol{e}_k, r_k, s_k)}_{k = 1:N^e}$ is the set of edges, where </li>
+                  <ul>
+                    <li>$|E| = N^v$ is the cardinality of $E$</li>
+                    <li>$\boldsymbol{e}_k$ is the edge's attribute (i.e. a vector/scalar value)</li>
+                    <li>$r_k$ is the index of the receiver node, $s_k$ is the index of the sender node</li>
+                  </ul>
+              </ul>
+
+              To get an intuitive understanding of the graph structure, imagine a system describing the 
+              physical movement of a set of four rubber balls connected to each other by a set of strings. The system lends itself 
+              nicely to the following graph abstraction. 
+            </p>
+
+            <a href="#">
+              <img class="img-fluid" src="/static/img/graph_networks/rubber-balls.png" style="height: auto; width: 750px;">
+            </a>
+            <span class="caption text-muted">Four rubber balls example</span>
+
+            <p>
+              In this scenario, 
+              <ul>
+                <li>$\boldsymbol{u}$ represents a gravitational field</li>
+                <li>$V = \{v_i\}_{i = 1:4}$ is a set containing rubber balls, where </li>
+                  <ul>
+                    <li>$|V| = 4$</li>
+                    <li>A node $v_i$ is an attribute represented as a vector, which holds values 
+                      associated with the mass, position, and velocity of a ball. 
+                    </li>
+                  </ul>
+                <li>$E$ is the set of 'string forces', where </li>
+                  <ul>
+                    <li>$|E| = 8$ is the cardinality of $E$ (Since two connected balls interact with each other, the string that connects the balls is represented by two edges)</li>
+                    <li>$\boldsymbol{e}_k$ is the edge's attribute (e.g. string constant or length)</li>
+                  </ul>
+              </ul>
+            </p>
+
+            
+
+			<h2 class="section-heading">A graph in, a graph out</h2>
+
+            <p>
+              At this point, a natural questions may arise "How does one train a model on graph data?"<br><br>
+
+              Now that we have covered the description of the "four balls" scenario, imagine that we'd like 
+              to create a model that predicts the movements of the four balls. <br><br>
+
+              DeepMind provides the algorithm to compute a GN block - a function that inputs
+               a graph $G$ and outputs a graph $G^{*}$. <br><br>
+
+               <a href="#">
+                <img class="img-fluid" src="/static/img/graph_networks/1-return-function.png" style="height: auto; width: 350px;">
+              </a><br><br>
+
+              Within a GN block, perform the following steps to obtain updated sets of edges, nodes, and an updated global
+              attribute. <br><br>
+
+              <b>1. Edge update:</b> Start updating the edge attributes by applying the 'update' function $\phi^e$. The 
+              framework provides flexibility when choosing $\phi^e$. Researchers used multilayer-perceptrons for edge attributes
+              expressed in vector forms, and CNN when edge attributes are expressed in higher degree tensor forms. <br><br>
+
+               <a href="#">
+                <img class="img-fluid" src="/static/img/graph_networks/2-edge-update.png" style="height: auto; width: 350px;">
+              </a><br><br>
+
+              <a href="#">
+                <img class="img-fluid" src="/static/img/graph_networks/2-edge-update-pic.png" style="height: auto; width: 350px;">
+              </a><br><br>
+
+              <b>2. Per node edge aggregation and node update:</b> For every node in $G$, aggregate the incoming edge attributes using the aggregator
+              function $\rho^{e \rightarrow v}$ and update nodes using $\phi^v$. The aggregator function  $\rho^{e \rightarrow v}$ just performs a combinatorially invariant operation
+              like summation or max/min. And $\phi^v$ can be defined as another MPP or CNN depending on the structure of node attributes.<br><br>
+
+
+
+               <a href="#">
+                <img class="img-fluid" src="/static/img/graph_networks/3-node-update.png" style="height: auto; width: 350px;">
+              </a><br><br>
+
+              <a href="#">
+                <img class="img-fluid" src="/static/img/graph_networks/3-node-update-pic.png" style="height: auto; width: 350px;">
+              </a><br><br>
+
+              <b>3. Global edge and node aggregation and global attribute update:</b> Finally, aggregate all the edges and nodes globally, and update the global attribute $\boldsymbol{u}$.
+              
+              <br><br>
+
+
+
+               <a href="#">
+                <img class="img-fluid" src="/static/img/graph_networks/4-global-update.png" style="height: auto; width: 350px;">
+              </a><br><br>
+
+              <a href="#">
+                <img class="img-fluid" src="/static/img/graph_networks/4-global-update-pic.png" style="height: auto; width: 350px;">
+              </a><br><br>
+
+
+            In total, a GN block performs operations on edge and node attributes using three update and three aggregate functions. The update
+            functions are neural nets of different kind, and the aggregate functions perform an invariant computation such as summation. For example,
+            the following function were used in one of the papers referenced by the authors.
+
+            <a href="#">
+              <img class="img-fluid" src="/static/img/graph_networks/5-update-aggregate.png" style="height: auto; width: 750px;">
+            </a><br><br>
+
+
+
+
+
+              
+
+              
+              
+            </p>
+
+          
+
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <hr>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <ul class="list-inline text-center">
+              <li class="list-inline-item">
+                <a href="#">
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+            </ul>
+            <p class="copyright text-muted">Copyright &copy; Your Website 2018</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="/static/vendor/jquery/jquery.min.js"></script>
+    <script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="/static/js/clean-blog.min.js"></script>
+
+  </body>
+
+</html>

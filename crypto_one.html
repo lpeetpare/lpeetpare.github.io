@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Down the Rabbit Hole</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="/static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/clean-blog.css" rel="stylesheet">
+
+	<!-- MathJax link -->
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+
+	<!-- For in-line math -->
+	<script type="text/x-mathjax-config">
+	MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+	</script>
+
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand" href="index">Down the Rabbit Hole</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          Menu
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="about">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="contact_alt">Contact</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="masthead" style="background-image: url('/static/img/crypto_one/1book0_alt.jpg')">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <div class="post-heading">
+              <h1>A Gentle Introduction to Mathematical Cryptography: Part 1</h1>
+              <span class="meta">Posted by
+                <a href="about">Liam Peet-Paré</a>
+                on December 22, 2018</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Post Content -->
+    <article>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+
+		  <p>Note that this is the first post in a three-part series on cryptography. The second post on Security is
+		  <a href="crypto_two">here</a>, and the third, on NTRU, is <a href="crypto_three">here</a>. This series of posts
+      was originally written as part of a summer research project under the supervision of Dr. Anne Broadbent and
+      Dr. Raza Kazmi at the University of Ottawa.
+
+            <h2 class="section-heading">What is Cryptography?</h2>
+			<p>Cryptography, as defined by the Oxford English Dictionary, is "the art of writing and solving codes”. As Katz
+			and Lindell note in [6] this is historically accurate, but with advent of rigorous modern cryptography
+			in the 1970s and 1980s, cryptography is more a science than an art today. Cryptography refers to the twin branches
+			of cryptology and cryptanalysis. Cryptology is the process of encrypting information, whereas cryptanalysis refers
+			to attempts to decrypt information. Cryptography is a very old idea and has existed in various forms for thousands
+			of years. At its core, cryptography is the art or science of sending secret messages between two parties, so that
+			a third party cannot decipher the message even if they were to intercept the message. In [12], Douglas
+			Stinson writes "The fundamental objective of cryptography is to enable two people, usually referred to as Alice
+			and Bob, to communicate over an insecure channel in such a way that an opponent, Oscar, cannot understand what is
+			being said." </p>
+
+            <p>In the past, cryptography was essential for sending secret messages containing sensitive information. For example,
+			during times of war, cryptography was used to send sensitive information that could potentially be intercepted by the
+			enemy. A famous historical example of encryption in use is the German Enigma machine during the Second World War,
+			whose cipher was eventually broken by Alan Turing and his colleagues at Bletchley Park. In the modern digital and
+			internet age, cryptography has become more important than ever before, as we are constantly sending sensitive information
+			over insecure channels.</p>
+
+			<a href="#">
+              <img class="img-fluid" src="/static/img/crypto_one/enigma.jpg" alt="The Enigma machine." style="width:650px;height:500px;">
+            </a>
+            <span class="caption text-muted">The Enigma machine. The robust encryption of messages, and the eventual breaking of
+			the enigma cipher were hugely important to the war effort on both sides.</span>
+
+            <p>On a daily basis, most of the world relies on the information security cryptography provides without even being aware of
+			it. For example, online banking, emails, and credit card purchases must all be encrypted to prevent third parties from stealing
+			one's information. This increase in the scope of cryptographic applications motivates the general definition of cryptography
+			given in [6] "[Cryptography is] the scientific study of techniques for securing digital information, transactions,
+			and distributed computation.” </p>
+
+
+
+            <p>In our scenario with Alice, Bob, and Oscar, the unencrypted message or information that Alice wants to send to Bob is referred
+			to as <i>plaintext</i>, while the encrypted message is known as <i>ciphertext</i>. The plaintext is encrypted using a <i>key</i>,
+			and is sent to Bob who is able to decrypt the ciphertext as he knows the encryption key. If the ciphertext is intercepted by Oscar,
+			he will be unable to decrypt the message as he does not know the encryption key.  </p>
+
+			<p>Formally we can define a cryptosystem as follows.</p>
+
+            <p><b>Definition (Cryptosystem)</b> <i>A cryptosystem is a five-tuple $\mathcal{(P,C,K,E,D)}$, where the following conditions are satisfied:
+				<ol>
+				<li>$\mathcal{P}$ is a finite set of possible plaintexts. </li>
+				<li>$\mathcal{C}$ is a finite set of possible ciphertexts. </li>
+				<li>$\mathcal{K}$, the keyspace, is a finite set of possible keys. </li>
+				<li>For each $k \in \mathcal{K}$, there is an encryption rule $e_k \in \mathcal{E}$ and a corresponding decryption rule $d_k \in \mathcal{D}$.
+				Each $e_k: \mathcal{P} \to \mathcal{C}$ and $d_k: \mathcal{C} \to \mathcal{P}$ are functions such that $d_k(e_k(x))=x$ for every plaintext
+				element $x \in \mathcal{P}.$ </i> </li>
+				</ol>
+			</p>
+
+
+            <p>Modern cryptography is an intersection of computer science and mathematics. One can approach cryptography from a more mathematical perspective,
+			or a perspective informed more from computer science. As a result, there are different vocabularies and ways of presenting information, that may
+			seem more or less intuitive depending on one's background. The above definition is drawn from a more mathematical perspective, so an alternative
+			computer science-centric definition can also be given. The following definition is in fact the commonly accepted definition of a cryptosystem in
+			modern cryptography, but it is perhaps less familiar to students coming from a mathematical background. </p>
+
+			<p><b>Definition (Alternate definition of a cryptosystem)</b><i> A cryptosystem is a 3-tuple of algorithms, $\Pi=(\texttt{keyGen}, \texttt{Enc}, \texttt{Dec})$
+			with the following properties:
+				<ol>
+				<li> The key-generation algorithm $\texttt{keyGen}(1^{\lambda})$ ($\lambda$ being the security parameter) is a probabilistic algorithm that
+				outputs a key $k \in \mathcal{K}$ chosen according to some distribution that is determined by the scheme.</li>
+				<li> The encryption algorithm $\texttt{Enc}$ takes as input a key $k$ and a plaintext $m \in \mathcal{P}$ and outputs a ciphertext $c \in \mathcal{C}$.
+				We denote the encryption of the plaintext $m$ using the key $k$ by $\texttt{Enc}_k(m)$.</li>
+				<li> The decryption algorithm $\texttt{Dec}$ takes as input a key $k$ and a ciphertext $c$ and outputs a plaintext $m$. We denote the decryption of
+				the ciphertext $c$ using the key $k$ by $\texttt{Dec}_k(c)$.</i></li>
+				</ol>
+			</p>
+
+            <p>Here, $\mathcal{K}$ is the keyspace, $\mathcal{P}$ is the set of possible plaintexts, and $\mathcal{C}$ is the set of possible ciphertexts.
+			An encryption scheme is fully defined by specifying the three algorithms ($\texttt{keyGen}$; $\texttt{Enc}$; $\texttt{Dec}$) and the plaintext space
+			$\mathcal{P}$. In order for the encryption scheme to function properly, we require that for every key $k$ output by $\texttt{keyGen}$ and every
+			plaintext $m \in \mathcal{P}$, it holds that $$\texttt{Dec}_k(\texttt{Enc}_k(m))=m.$$ The two definitions of a cryptosystem given above actually
+			define a $\textit{private-key}$ or $\textit{symmetric}$ cryptosystem, however they can easily be modified to define a $\textit{public-key}$ or
+			$\textit{asymmetric}$ cryptosystem as we will discuss later. </p>
+
+
+
+            <p>While the definition of a cryptosystem is not particularly involved or complex, it does not make it clear what an encryption scheme might look
+			like in practice, so we provide a couple of examples of simple encryption schemes borrowed from [12] to help reify our discussion thus far.</p>
+
+			<p><b>Cryptosystem 1</b> <i>Shift Cipher <br>
+				Let $\mathcal{P=K=C}=\mathbb{Z}_{26}$. For $0 \le k \le 25$, define
+				$$ e_k(x)=(x+k) \ mod \ 26 $$
+				and
+				$$ d_k(y)=(y-k) \ mod \ 26 $$
+				$(x,y \in \mathbb{Z}_{26}).$ </i>
+			</p>
+
+
+            <p><b>Cryptosystem 2</b> <i>Substitution Cipher <br>
+				Let $\mathcal{P=C}=\mathbb{Z}_{26}$. $\mathcal{K}$ consists of all possible permutations of the 26 symbols $0,1,\ldots,25$. For each permutation
+				$\pi \in \mathcal{K}$, define
+				$$ e_{\pi}(x)=\pi(x), $$
+				and define
+				$$ d_{\pi}(y)=\pi^{-1}(y), $$
+				where $\pi^{-1}$ is the inverse permutation to $\pi$.</i>
+			</p>
+
+
+            <p>In the Shift Cipher, our plaintext space, keyspace, and ciphertext space are all $\mathbb{Z}_{26}$. To encrypt a message we take
+			a letter $x$ from our plaintext and add our key $k$ to it modulo 26. The resulting ciphertext has therefore been ``shifted". We provide
+			an example to illustrate. Suppose the key for our shift cipher is $k=13$ and we have the plaintext
+			 $$iamacat$$
+			 which we want to encrypt. First we convert the letters into numbers modulo 26 so our encryption key can take them as input. For our plaintext we have:
+			 $$8 \ 0 \ 12 \ 0 \ 3 \ 0 \ 19$$
+			 Now we apply our encryption algorithm by adding 13 to each value and reducing each sum modulo 26. Doing this we obtain:
+			 $$21 \ 13 \ 25 \ 13 \ 16 \ 13 \ 6$$
+			 To obtain our ciphertext, we now convert our numbers back to letters
+			 $$vnznqng$$
+			Hence Alice would send "vnznqng" to Bob. Upon receiving this ciphertext, Bob could decrypt the message to read the original "iamacat". If Oscar
+			 intercepts the ciphertext he will not be able to decrypt it unless he knows the key, $k$. Clearly this cryptosystem is not very secure, as it would
+			 not be difficult for Oscar to determine $k$ by merely exhaustively trying all the integers $0 \le k \le 25$. </p>
+
+
+            <p>The Shift Cipher is actually a special case of the substitution cipher, as it contains only 26 of the possible $26!$ permutations of 26 elements.
+			The number of possible permutations, $26!$, is a very large number, so an exhaustive search for the key is infeasible. The Substitution Cipher is
+			therefore more secure than the Shift Cipher, but there are other methods than an exhaustive search to break the cryptosystem (see [12])
+			that we will not discuss here. An encryption scheme's security depends on more than an attacker being able to recover the encryption key, and we
+			will provide a more detailed discussion of cryptographic security later in a future post in this series. The two cryptosystems presented above can be used to convert
+			Roman alphabet plaintexts into ciphertexts. Clearly modern day cryptography encompasses more than just sending secret messages, and the cryptosystems
+			that are widely used today are more complex than these two toy examples. That being said, shift and substitution ciphers have been used many times
+			throughout history, and before the invention of computers, cryptanalysing a well implemented substitution cipher would have been no trivial task.</p>
+
+			<h2 class="section-heading">Public-Key Cryptography</h2>
+
+			<p>As we mentioned earlier, the theory of cryptography took a decisive turn in the 1970s and 1980s. The theoretical revolution in cryptography was
+			largely sparked by a 1976 paper by Diffie and Hellman titled "New Directions in Cryptography." This paper introduced several new ideas that would
+			become central to the study of cryptography for the next several decades. For the purposes of this post, the most important concept Diffie and Hellman
+			introduced was that of $\textit{public-key}$ or $\textit{asymmetric}$ cryptography.</p>
+
+			<p>In our earlier definitions and examples of encryption schemes, both Alice and Bob shared the same key that could be used to both encrypt and decrypt
+			messages. This is certainly an effective method of designing a cryptosystem, but its security requires that the key be kept secret from hostile third
+			parties such as Oscar. As Alice and Bob both use the same key, and this key must be kept secret, this kind of cryptosystem is called a private-key or
+			symmetric encryption scheme. A private-key cryptosystem requires that Alice and Bob have a secure channel in which they can share the key before they
+			start communicating over an insecure channel. For many cryptographic purposes a private-key scheme poses no problems. For example, for military purposes
+			it is generally feasible for personnel to physically travel to another location to share an encryption key before communicating over insecure channels,
+			or if an individual wants to encrypt their hard-drive she merely has to "share" the encryption key with herself.</p>
+
+			<p>For many other applications of cryptography however, it is clear that a private-key encryption scheme is not sufficient, as it may not be possible
+			to exchange keys over a secure channel before commencing encrypted communication. For example, if two people who have never met and live in different
+			countries want to communicate via encrypted email, it is less feasible to find a secure channel in which to exchange keys. Another example where a
+			private-key scheme is even more inadequate is that of an online merchant. An online retailer has to complete thousands of secure transactions in an
+			efficient manner with people it will never have physical contact with, so there is clearly no way to generate and securely communicate keys with all
+			of its patrons [6].</p>
+
+			<p>Thankfully, Diffie and Hellman's revolutionary idea of public-key cryptography addresses these issues. In a public-key encryption scheme, Alice
+			and Bob have two keys - a public key and a private (or secret) key. The public key does not need to be kept secret, and it is used to encrypt messages,
+			while the private key (which is kept secret as its name suggests) is used to decrypt messages. Under this type of encryption scheme, Bob can publish
+			his public key (in a directory, for example), which Alice can use to encrypt her plaintext to send to Bob, and only Bob's private key will be able to
+			decrypt the message. Once Alice encrypts her plaintext using Bob's public key, not even she will be able to decrypt the message, as Bob's secret key
+			corresponds to his public key in some way. Note that unlike a private-key encryption scheme, a different key is used to encrypt and decrypt messages,
+			hence public-key cryptosystems are also referred to as $\textit{asymmetric}$ cryptosystems. To make this discussion more exact we provide a definition
+			of a public-key cryptosystem as given by Nguyen and Pointcheval in [8].</p>
+
+			<p><b>Definition (Public-key cryptosystem)</b><i> A public-key (or asymmetric) encryption scheme is a 3-tuple of algorithms
+			$\Pi=(\texttt{keyGen}, \texttt{Enc}_{pk}$, $\texttt{Dec}_{sk})$ with the following properties:
+				<ol>
+				<li> The key-generation algorithm $\texttt{keyGen}(1^\lambda)$ ($\lambda$ being the security parameter), produces a pair ($\texttt{pk,sk}$) of public
+				 and private (secret) keys. </li>
+				<li> The encryption algorithm $\texttt{Enc}_{pk}(m)$ outputs a ciphertext $c$ corresponding to the plaintext $m \in \mathcal{P}$, according to
+				the public key $\texttt{pk}$. </li>
+				<li> The decryption algorithm $\texttt{Dec}_{sk}(c)$ which outputs the plaintext $m$ associated to the ciphertext $c$ (or a distinguished failure
+				symbol $\perp$, if $c$ is an invalid ciphertext), given the private key $\texttt{sk}$. </li>
+				</ol> </i>
+			</p>
+
+			<p>It at first seems incredible that publishing the public key would not compromise the security of the encryption scheme, but when we look at real
+			world analogies we can get an idea of how this might be possible. For example, everyone knows how to lock a padlock, but only a person with the key
+			can open it once it is locked, and it is easy to break a window, but much more challenging to put it back together. Diffie and Hellman introduced
+			the idea of public-key cryptography in 1976, but did not present a construction for an actual cryptosystem. Only one year later however, Rivest,
+			Shamir, and Adleman introduced the RSA problem and presented a public-key encryption scheme based on it.</p>
+
+			<a href="#">
+              <img class="img-fluid" src="/static/img/crypto_one/rsa.jpg" alt="RSA: Ron Rivest, Adi Shamir, and Leonard Adelman." style="width:550px;height:350px;">
+            </a>
+            <span class="caption text-muted">RSA: Ron Rivest, Adi Shamir, and Leonard Adelman.</span>
+
+			<p>The RSA public-key encryption scheme is based on the hardness of factoring integers. That is, given a composite integer $N$, find positive integers
+			$p,q$ such that $pq=N$. The general idea behind RSA is that multiplying two large primes $p$ and $q$ together is very easy, but given their product $pq=N$,
+			factoring $N$ is extremely difficult. After the creation of the $\textit{RSA Cryptosystem}$, other public-key cryptosystems followed. The most important
+			of these public-key cryptosystems are RSA and its variations and the $\textit{ElGamal Cryptosystem}$ and its variations. As we just mentioned, the security
+			of RSA is based on the computational infeasibility of factoring large integers, while ElGamal is based on the computational infeasibility of what is known
+			as the discrete logarithm problem. A variation on ElGamal is known as elliptic curve cryptography (ECC) which is based on the algebraic structure of
+			elliptic curves over finite fields. </p>
+
+			<h2 class="section-heading">Post Quantum Cryptography</h2>
+
+			<p>Public-key encryption schemes such as RSA, ElGamal, and ECC have proved to be extremely effective and are used all over the world to ensure secure
+			communication in situations where private-key cryptosystems are not sufficient. As mentioned before, RSA's security is based on the hardness of factoring
+			integers while ElGamal and ECC are based on elliptic curves, and their security depends on the hardness of the discrete logarithm problem. Thus far, no
+			one has found a classical polynomial time algorithm to factor integers or solve the discrete logarithm problem, and it is conjectured that no such algorithm
+			exists [6]. This is not the case however in quantum theory. </p>
+
+			<p>In 1994 Peter Shor discovered quantum algorithms for factoring and discrete logarithms, now known as Shor's algorithm. Shor's algorithm can factor
+			integers in polynomial time and it was further shown that Shor's algorithm could be applied to discrete logarithm problems and solve those in polynomial
+			time as well. This means that as soon as a large quantum computer is developed, RSA, ElGamal, and related cryptosystems will no longer be secure, as
+			they can be trivially broken using Shor's algorithm. No such quantum computer yet exists, but it is believed that a functional large quantum computer
+			could be built within 20 years [1].  </p>
+
+			<p>While the discovery of Shor's algorithm was certainly a blow to public-key cryptography, it is far from its death knell. Despite the fact that RSA
+			and ElGamal will no longer be secure after a large quantum computer is built, there are many other cryptographic schemes that are believed to be secure
+			against quantum attacks. Post Quantum Cryptography therefore, refers to the study of encryption schemes that are secure against attacks by quantum
+			computers. Some post-quantum schemes are themselves quantum (i.e. utilize the principles of quantum mechanics), while others are classical schemes.
+			Among the potential post-quantum encryption schemes is a cryptosystem called $\textit{NTRU}$, which is an example of what is known as lattice based
+			cryptography. A post later in this intro to cryptography series will be devoted to explaining NTRU and exploring its security. Before we begin this discussion
+			however, we will first need to explain some notions of $\textit{security}$ in the world of theoretical cryptography.   </p>
+
+			<a href="crypto_two">
+			<h5>Part 2 of the series: Security</h5>
+			</a>
+			<br/>
+
+			<h5>References</h5>
+
+			<br/>
+
+			<ol>
+			<li>Daniel J. Bernstein, Johannes Buchmann, and Erik Dahmen. <i> Post Quantum Cryptography</i>. 2009: Springer-Verlag, Berlin.</li>
+
+			<li>Dan Boneh and Ramarathnam Venkatesan. (1998). Breaking RSA may not be equivalent to factoring.
+			<i> Advances in Cryptology - EUROCRYPT '98. Lecture Notes in Computer Science, Volume 1403</i>, 59-71. Springer, Berlin.</li>
+
+			<li>Shafi Goldwasser and Silvio Micali. (1982). Probabilistic Encryption & How to Play Mental Poker Keeping Secret all
+			Partial Information. <i> STOC '82 Proceedings of the fourteenth annual ACM symposium on Theory of computing</i> (pp. 365-377). ACM, New York.</li>
+
+			<li>Jeffrey Hoffstein, Jill Pipher, and Joseph H. Silverman. (1998). NTRU: A ring based public key cryptosystem.
+			<i> Lecture Notes in Computer Science, Volume 1423</i>, 267-288. Springer, Berlin.</li>
+
+			<li>Jeffrey Hoffstein, Jill Pipher, and Joseph H. Silverman. <i> An Introduction to Mathematical Cryptography</i>. 2008: Springer, N.Y.</li>
+
+			<li>Jonathan Katz and Yehuda Lindell. <i> Introduction to Modern Cryptography</i>. 2007: CRC Press, N.Y.</li>
+
+			<li>Vadim Lyubashevsky, Chris Peikert, and Oded Regev. (2010). On Ideal Lattices and Learning with Errors over Rings. In H.
+			Gilbert (ed.), <i> Advances in Cryptology - EUROCRYPT 2010</i> (pp. 1-23). Springer, Berlin.</li>
+
+			<li>Phong Q. Nguyen and David Pointcheval. (2002). Analysis and Improvements of NTRU Encyption Paddings.
+			In M. Yung (ed.), <i> Advances in Cryptology - Proceedings of CRYPTO 2002</i> (pp. 210-225). Springer-Verlag, Berlin.</li>
+
+			<li>Chis Peikert. <i> A Decade of Lattice Cryptography</i> 2016: Now Publishers.</li>
+
+			<li>Damien Stehle and Ron Steinfeld. (2011). Making NTRU as Secure as Worst-Case Problems over
+			Ideal Lattices. In K.G. Patterson (ed.), <i> Advances in Cryptology - EUROCRYPT 2011</i> (pp. 27-47). Springer, Berlin.</li>
+
+			<li>Ron Steinfeld et al. (2012). NTRUCCA: How to Strengthen NTRUEncrypt to Chosen-Ciphertext Security in
+			the Standard Model. <i> Lecture Notes in Computer Science, Volume 7293</i>, 353-371. Springer, Berlin.</li>
+
+			<li>Douglas Stinson. <i> Cryptography Theory and Practice</i>. 2002: CRC Press, Boca Raton.</li>
+			</ol>
+
+			<p></p>
+
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <hr>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <ul class="list-inline text-center">
+              <li class="list-inline-item">
+                <a href="#">
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+            </ul>
+            <p class="copyright text-muted">Copyright &copy; Your Website 2018</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="/static/vendor/jquery/jquery.min.js"></script>
+    <script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="/static/js/clean-blog.min.js"></script>
+
+  </body>
+
+</html>

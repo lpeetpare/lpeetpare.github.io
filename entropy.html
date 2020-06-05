@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Down the Rabbit Hole</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="/static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/clean-blog.css" rel="stylesheet">
+
+	<!-- MathJax link -->
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+
+	<!-- For in-line math -->
+	<script type="text/x-mathjax-config">
+	MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+	</script>
+
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">Down the Rabbit Hole</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          Menu
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="about">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="contact_alt">Contact</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="masthead" style="background-image: url('/static/img/entropy/1book4.jpg')">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <div class="post-heading">
+              <h1>An Introduction to Entropy</h1>
+              <span class="meta">Posted by
+                <a href="#">Liam Peet-Paré</a>
+                on December 22, 2018</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Post Content -->
+    <article>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <h2 class="section-heading">Entropy</h2>
+
+			<p>If you’ve done any work in machine learning, chances are you’ve come across a cross-entropy loss function. Cross-entropy
+			is a powerful concept, drawn from the field of information theory, but it is a bit more complex, and less intuitive - at least
+			for the average human, myself very much included - than something like mean-squared error. It seems to be much more natural
+			for humans to think of difference in terms of Euclidean distance, rather than something like “information loss”, or the
+			distance between probability distributions. This post and the next will attempt to give a brief introduction to entropy, cross-entropy,
+			and a couple of other related ideas that are important in machine learning.</p>
+
+            <p>Information theory comes from Claude Shannon, an American mathematician, electrical engineer, and cryptographer who was
+			one of those awe-inspiring geniuses that seem to pop up in the world of mathematics from time to time. Among his many
+			remarkable contributions, Shannon published an article titled “A Mathematical Theory of Communication” in the Bell System Technical
+			Journal in 1948. This article, published in two-parts, introduced the notion of information entropy and laid out the foundation
+			for what would become known as information theory.</p>
+
+			<h2 class="section-heading">What is Entropy?</h2>
+
+            <p>Given a probability distribution $p(x)$, Entropy is defined as
+				$$Entropy = H(p) = -\sum_{x} p(x)\log_{2}p(x) = E_{x\sim p}[-\log_{2}p(x)]$$ </p>
+
+            <p>While you might be able to draw out some intuition just by staring at this definition long enough, it’s not exactly clear
+			what entropy is used for, what motivated this definition, nor what it means in a useful sense, so let’s dig into that a little bit.  </p>
+
+			<p>We’ll start with the motivation. Shannon was looking for ways to send messages efficiently without losing information - given that he
+			worked for Bell labs you can imagine why he would have been interested in this. Shannon measured efficiency in terms of message length,
+      so he wanted to minimze message length while ensuring that there could be no information loss or ambiguity in the message sent.
+			</p>
+
+      <p>To make this a little more clear we'll consider an example. Suppose that there are two individuals communicating with
+        each other, call them Josh and Drew. Josh and Drew are big surfing fans and they are constantly communicating with each other
+        regarding surfing conditions. Josh lives right next to the beach, so he sends Drew updates about the surf conditions. Josh
+        likes to keep things simple, so he communicates only two options to Drew: "Good" or "Not Good".</p>
+
+      <p>Since we only have two possible messages, and because we are thinking about encoding messages for computers to send,
+        we have a binary situation. The most efficient way to send these messages would be to encode "Good" as 1 and "Not Good" as 0. </p>
+
+        <p>$$\begin{equation*}
+          \begin{split}
+          Good = 1 \\
+          Not\ Good = 0\\
+          \end{split}
+          \end{equation*}$$
+        </p>
+
+        <p>Not only is this encoding the most efficient way for Josh to send his information, but it is also lossless, i.e. it
+          completely preserves information. If Drew recieves a 1 he knows conditions are "Good" and 0 "Not Good". There is no
+          ambiguity no matter how many messages Josh sends.</p>
+
+
+        <p>That's all fine and dandy if Josh only ever sends those two messages, but if he's feeling a little more creative
+          and starts to also send "Great" and "Terrible" to Drew to give him a better idea of what to expect, we'll need to
+          adjust our encoding scheme. Using one bit to encode these messages will no longer be sufficient because we wouldn't
+          be able to distinguish between messages, so we'll need to move to two bits to get a lossless encoding.</p>
+
+        <p>
+          $$  \begin{equation*}
+            \begin{split}
+            Great = 00 \\
+            Good = 01 \\
+            Not\ Good = 10\\
+            Terrible = 11 \\
+            \end{split}
+            \end{equation*} $$
+        </p>
+
+        <p>We have again achieved a lossless encoding using two bits to encode each message, but once we move to more than
+          two messages, the question of what the most efficient encoding is gets more complicated. If Josh sends each of the
+          four messages with equal probability, we have indeed found the most efficient encoding (or any permutation of the
+          encoding scheme given), but if the messages are not sent with equal probability, the situation gets more complicated. </p>
+
+        <p>Consider the following probability distribution for messages:</p>
+
+          <div class="col-lg-12">
+                        <!--Table-->
+                        <table id="review_table" class="table">
+
+                            <!--Table head-->
+                            <thead>
+                                <tr>
+                                    <th>Message</th>
+                                    <th>Probability</th>
+                                    <th>Encoding</th>
+                                </tr>
+                            </thead>
+                            <tbody id="user_sentences_rows">
+                  <tr>
+                    <td>Great</td>
+                    <td>$3/4$</td>
+                    <td>?</td>
+                  </tr>
+                  <tr>
+                    <td>Good</td>
+                    <td>$1/8$</td>
+                    <td>?</td>
+                  </tr>
+                  <tr>
+                    <td>Not Good</td>
+                    <td>$1/16$</td>
+                    <td>?</td>
+                  </tr>
+                  <tr>
+                    <td>Terrible</td>
+                    <td>$1/16$</td>
+                    <td>?</td>
+                  </tr>
+                            </tbody>
+                        </table>
+                      </div>
+
+          <p>This is obviously not a uniform distribution, and it forces us to ask the question as to whether or not using a two bit
+          encoding for each message is the most efficient encoding possible. Given that Josh sends "Great" far more often than
+          any other message, it seems likely that choosing a shorter encoding for "Great" could help us get to a more efficient
+          average message length. What if instead of our original encoding scheme we use the following: </p>
+
+           <p>
+           $$\begin{equation*}
+            \begin{split}
+            Great = 0 \\
+            Good = 01 \\
+            Not\ Good = 111\\
+            Terrible = 110 \\
+            \end{split}
+            \end{equation*}$$</p>
+
+            <p>We can actually calculate what the average message encoding length will be under these two schemes. To do this we
+            need an expected value of the encoding length. For a message $x$, the probability of sending that message will be
+            denoted $p(x)$, and the message length will be denoted as $l(x)$.</p>
+
+            <h5>Scheme 1:</h5>
+
+            <p>
+              $$\begin{equation*}
+              \begin{split}
+              Average\ length = E(l(x)) &= \sum_{x} p(x)l(x) \\
+              &= (\frac{3}{4} \cdot 2) + (\frac{1}{8} \cdot 2) + (\frac{1}{16} \cdot 2) + (\frac{1}{16} \cdot 2) \\
+              &= \frac{12}{8} + \frac{2}{8} + \frac{1}{8} + \frac{1}{8} \\
+              &= \frac{16}{8} \\
+              &= 2 \\
+              \end{split}
+              \end{equation*}$$
+            </p>
+
+            <h5>Scheme 2:</h5>
+
+            <p>
+              $$\begin{equation*}
+                \begin{split}
+                Average\ length = E(l(x)) &= \sum_{x} p(x)l(x) \\
+                &= (\frac{3}{4} \cdot 1) + (\frac{1}{8} \cdot 2) + (\frac{1}{16} \cdot 3) + (\frac{1}{16} \cdot 3) \\
+                &= \frac{12}{16} + \frac{4}{16} + \frac{3}{16} + \frac{3}{16} \\
+                &= \frac{22}{16} \\
+                &= 1.375 \\
+                \end{split}
+                \end{equation*}$$
+                </p>
+
+            <p>So the average message length when we use two bits to encode each message is (obviously) 2, whereas the average
+              message length with our slightly more complex second scheme is 1.375 bits. Thus we have shown that the second
+              scheme is in fact a more efficient encoding than the first scheme.</p>
+
+            <p>We can see from this toy example that optimal encoding length depends on the probability distribution over the
+              space of possbile messages. I also have not gone into any kind of detail regarding necessary and sufficient
+              conditions for a lossless encoding. The encoding schemes presented above are in fact lossless, but not every
+              scheme is lossless. For example, the following scheme is not lossless: </p>
+
+            <p>$$\begin{equation*}
+                \begin{split}
+                Great = 0 \\
+                Good = 1 \\
+                Not\ Good = 00\\
+                Terrible = 11 \\
+                \end{split}
+                \end{equation*}$$
+            </p>
+
+            <p>The fact that this is not lossless is fairly easy to see. For example, if Josh were to send "$0100$" it is impossible
+              to know if this means "Great, Good, Not Good", or instead "Great, Good, Great, Great". Necessary and sufficient
+              conditions for the existence of a uniquely decodeable code for a given set of codeword lengths are given by
+              the <a href="https://en.wikipedia.org/wiki/Kraft%E2%80%93McMillan_inequality">Kraft-McMillan inequality<a>. I wont
+              go into detail or prove the Kraft-McMillan inequality here, but you can refer to its Wikipedia page if you want
+              a more in-depth treatment.
+            </p>
+
+            <p>The statement of the Kraft-McMillan inequality, as per Wikipedia, is as follows:</p>
+
+            <p>Let each source symbol from the alphabet
+
+                $$ S = \{s_1, s_2, \ldots, s_n \} $$
+
+                be encoded into a uniquely decodable code over an alphabet of size $r$ with codeword lengths
+
+                $$l_1, l_2, \ldots , l_n. $$
+
+                Then
+
+                $$ \sum_{i=1}^{n}r^{-l_i} \le 1 $$
+
+                Conversely, for a given set of natural numbers $l_1, l_2, \ldots , l_n$ satisfying the above inequality,
+                there exists a uniquely decodable code over an alphabet of size $r$ with those codeword lengths.</p>
+
+              <p>At this point you could be forgiven if you're asking yourself "What does all this have to do with entropy?",
+                so I will try to make that connection now. </p>
+
+              <p>We'll start by taking a look at the Kraft-McMillan inequality and seeing if we can connect that to entropy.
+                Because we are talking about encoding messages in binary, our alphabet is the set $\{0, 1\}$ and so $r=2$. Let's
+                say we have $N$ distinct messages to send, so we have codeword lengths $l_1, l_2, \ldots, l_N$. To simplify things,
+                let's say we have a uniform probability distribution over our message space. That is, we are equally likely to send
+                any one of our $N$ messages. If this is the case then there is no advantage to having different lengths for messages,
+                so let us choose a constant, $\mathcal{L}$, to be our message length.</p>
+
+                <p>$$l_i = \mathcal{L},\ \  1 \le i \le N$$  </p>
+
+              <p>Now the Kraft-McMillan inequality looks like this:
+
+                $$\sum_{i=1}^{N} 2^{-\mathcal{L}} = \sum_{i=1}^{N} \frac{1}{2^{\mathcal{L}}} = \frac{N}{2^{\mathcal{L}}} \le 1$$
+
+                Now, we can try to solve for $\mathcal{L}$ to find out what kind of constraint we have on the codes for our message
+                lengths.
+
+                $$\begin{equation*}
+                    \begin{split}
+                    \frac{N}{2^{\mathcal{L}}} &\le 1 \\
+                    N &\le 2^{\mathcal{L}} \\
+                    \log_2{N} &\le \mathcal{L} \\
+                    \mathcal{L} &\ge \log_2{N}
+                    \end{split}
+                    \end{equation*}$$
+
+                So if we have a constant code length for our messages, it has to be greater than or equal to $\log_2$ of the number
+                of distinct messages that might be sent. Since we are looking for a minimal encoding size, we would want to go
+                 with equality. Hence, in the case of equally probable messages, our optimal message length is
+
+                  $$\log_{2}N = \log_{2} \frac{1}{p(x)} = - \log_{2} p(x)$$
+
+                Here $p(x)$ is the probability of message $x$ being sent. This is finally starting to look suspiciously similar
+                to our formula for calculating entropy. We can see that here $- \log_{2} p(x)$ in the entropy formula
+                represents the length of the encoding of the message, so calculating the entropy will give us the expected or
+                average message length, just like we calculted earlier in our example with Josh and Drew.</p>
+
+              <p>In fact, entropy gives you the most efficient encoding for messages irrespective of the probability distribution
+                over the message space. If we revisit our example from before, we can try to calculate the optimal message lengths
+                based on the probability distribution. </p>
+
+                            <div class="col-lg-12">
+                                          <!--Table-->
+                                          <table id="review_table" class="table">
+
+                                              <!--Table head-->
+                                              <thead>
+                                                  <tr>
+                                                      <th>Message ($x$)</th>
+                                                      <th>Probability ($p(x)$)</th>
+                                                      <th>$-\log_{2} p(x)$</th>
+                                                  </tr>
+                                              </thead>
+                                              <tbody id="user_sentences_rows">
+                                    <tr>
+                                      <td>Great</td>
+                                      <td>$3/4$</td>
+                                      <td>0.415</td>
+                                    </tr>
+                                    <tr>
+                                      <td>Good</td>
+                                      <td>$1/8$</td>
+                                      <td>3</td>
+                                    </tr>
+                                    <tr>
+                                      <td>Not Good</td>
+                                      <td>$1/16$</td>
+                                      <td>4</td>
+                                    </tr>
+                                    <tr>
+                                      <td>Terrible</td>
+                                      <td>$1/16$</td>
+                                      <td>4</td>
+                                    </tr>
+                                              </tbody>
+                                          </table>
+                                        </div>
+
+
+                  <p>If we calculate the entropy we get
+
+                    $$\begin{split}
+              			H(p) &= -\sum p(x)\log_2 p(x) \\
+              					   &= -(3/4 \cdot \log_2(3/4) + 1/8 \cdot \log_2(1/8) + 1/16 \cdot \log_2(1/16) + 1/16 \cdot \log_2(1/16)) \\
+              					   &= -((-0.31) - 3/8 - 1/4 - 1/4) \\
+              					   &= 1.185
+              			\end{split}$$
+
+                    This is a better average message length than we got with our earlier encoding, but the only problem
+                    is that we can't encode messages with fractions of bits, so we'll have to round. We need to use at least
+                    one bit to encode "Great", but if it were possible to encode with fractions of bits, the entropy would give
+                    us an optimal encoding for our messages.</p>
+
+                  <p>Given our additional constraint of not being able to encode messages using fractional bits, we can round off our
+                    message lengths in order to come up with an encoding scheme.  </p>
+
+                    <div class="col-lg-12">
+                                  <!--Table-->
+                                  <table id="review_table" class="table">
+
+                                      <!--Table head-->
+                                      <thead>
+                                          <tr>
+                                              <th>Message ($x$)</th>
+                                              <th>Probability ($p(x)$)</th>
+                                              <th>Integer Length</th>
+                                              <th>Encoding</th>
+                                          </tr>
+                                      </thead>
+                                      <tbody id="user_sentences_rows">
+                            <tr>
+                              <td>Great</td>
+                              <td>$3/4$</td>
+                              <td>1</td>
+                              <td>0</td>
+                            </tr>
+                            <tr>
+                              <td>Good</td>
+                              <td>$1/8$</td>
+                              <td>2</td>
+                              <td>01</td>
+                            </tr>
+                            <tr>
+                              <td>Not Good</td>
+                              <td>$1/16$</td>
+                              <td>3</td>
+                              <td>111</td>
+                            </tr>
+                            <tr>
+                              <td>Terrible</td>
+                              <td>$1/16$</td>
+                              <td>3</td>
+                              <td>110</td>
+                            </tr>
+                                      </tbody>
+                                  </table>
+                                </div>
+
+                      <p>Since we have to use at least one bit to encode "Great", we are able to actually reduce the length of
+                        the encoding for the other messages from our previous example while still satisfying the Kraft-McMillan inequality.
+
+                        $$\begin{split}
+                  			\sum_{i=1}^{N} 2^{-l_i} &= \sum_{i=1}^{N} \frac{1}{2^{l_i}} \\
+                  					   &=  \frac{1}{2^{1}} + \frac{1}{2^{2}} + \frac{1}{2^{3}} + \frac{1}{2^{3}}\\
+                  					   &=  \frac{1}{2} + \frac{1}{4} + \frac{1}{8} + \frac{1}{8}\\
+                  					   &= 1
+                  			\end{split}$$
+                      </p>
+
+                      <p>This is the same encoding scheme that we presented earlier in the post, and after doing our expected message length
+                        (i.e. entropy) calculation we found that
+
+                        $$  Average\ length = E(l(x)) = H(p) = 1.375 $$
+
+                        This isn't quite as good as when we are not constrained to integer length encodings, but it is the optimal encoding we can get
+                        given this restriction. </p>
+
+                      <p>You may have noticed that entropy seems to be higher when we have a uniform distribution rather than a distribution with probability
+                        mass concentrated at various points. I won't prove it here, but a uniform distribution does in fact result in the maximal
+                        entropy possible. This fact connects to the interpretation of entropy as a measure of information or surprise. In a probability
+                        space, if the the likelihood of any event occurring is equally probable (i.e. uniformly distributed), it is the hardest to predict
+                        what event will occur at any given time. Hence, in a sense there is more "surprise" or less certainty regarding the occurrence of events.
+                        Conversely, if all probability mass is concentrated on one point, that is, one event occurs with probability equal to 1, then entropy is
+                        minimal as we know with certainty which event will occur at all times. Entropy is also an important notion in physics where it is
+                         used in relation to the energy of a system </p>
+
+                      <p>If it's not clear from this post what all of this entropy stuff has to do with machine learning and loss-functions, don't worry,
+                        you didn't miss anything. The next post on cross-entropy will try to address this a little more directly, but it's useful to have
+                        at least a basic undestanding of entropy before delvign into cross-entropy and its use as a loss function.</p>
+
+                      <p>The continuation of this post, which will delve into cross-entropy can be found <a href="cross-entropy">here.</a></p>
+
+
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <hr>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <ul class="list-inline text-center">
+              <li class="list-inline-item">
+                <a href="#">
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+            </ul>
+            <p class="copyright text-muted">Copyright &copy; Your Website 2018</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="/static/vendor/jquery/jquery.min.js"></script>
+    <script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="/static/js/clean-blog.min.js"></script>
+
+  </body>
+
+</html>
