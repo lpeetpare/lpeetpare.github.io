@@ -64,9 +64,9 @@
           <div class="col-lg-8 col-md-10 mx-auto">
             <div class="post-heading">
               <h1>An Introduction to Cross-Entropy</h1>
-              <span class="meta">Posted by
+              <!--<span class="meta">Posted by
                 <a href="about">Liam Peet-Pare</a>
-                on December 22, 2018</span>
+                on December 22, 2018</span>-->
             </div>
           </div>
         </div>
@@ -112,7 +112,7 @@
 
             <p>Note that cross-entropy is not symmetric, so $H(p, q)$ does not necessarily equal $H(q, p)$. The following example makes this clear. </p>
 
-			<p>Imagine that we have two individuals, call them Amir and Melody, who communicate with eachother. The only messages Amir and Melody communicate
+			<p>Imagine that we have two individuals, call them Amir and Melody, who communicate with each other. The only messages Amir and Melody communicate
 			are "Excellent", "Good", "Bad", "Terrible". Hey, not everyone is a great conversationalist. Amir and Melody communicate these messages with the
 			following frequencies: </p>
 
@@ -210,7 +210,7 @@
                     </table>
                   </div>
 
-			<p>In this exmaple, what we are asking when calculate cross-entropy is "what is the average message length if Amir encodes his messages
+			<p>In this example, what we are asking when calculate cross-entropy is "what is the average message length if Amir encodes his messages
 			with lengths chosen according Melody's message frequencies, and vice versa?". In this case it is actually more expensive for Amir to encode
 			his messages according to Melody's probability distribution than it is for Melody to encode her messages according to Amir's probability
 			distribution.</p>
@@ -372,7 +372,7 @@
 			\end{split}$$
 			</p>
 
-			<p>This is clearly true for all data-points with one-hot encodings, so the all have zero entropy. This makes sense as there is no
+			<p>This is clearly true for all data-points with one-hot encodings, so they all have zero entropy. This makes sense as there is no
 			uncertainty or surprise involved - each data-point belongs to a category with probability equal to 1. Now imagine we train a model
 			to predict the categories of our data-points. The output vector we obtain when we feed-forward through the trained model also defines
 			a probability distribution over our categories. Let's call these output vectors $Q_{x_i}$, and say that $Q_{x_4} = [0.2\ 0.6\ 0.15\ 0.05]$.</p>
@@ -406,13 +406,13 @@
 			cross-entropy decreases. So if we are using a cross-entropy loss function, we will minimize our model's loss as the predictions
 			approach the real value, something we obviously desire.</p>
 
-			<p>It's worth quickly mentioning why I used $\ln$ instead of $\log_2$ for the calculations. In machine learning we usbase $e$ instead of base
-			2 for a few reasons, one of which is that it is typically faster to calculate $\ln$ using a copmuter. This may seem strange given that we
+			<p>It's worth quickly mentioning why I used $\ln$ instead of $\log_2$ for the calculations. In machine learning we use base $e$ instead of base
+			2 for a few reasons, one of which is that it is typically faster to calculate $\ln$ using a computer. This may seem strange given that we
 			motivated our entire discussion of entropy by talking about encoding messages in binary, but for the purposes of a machine learning loss function
-			there is no necessity to use base 2, and as $\log_2(x) = {\frac {\ln(x)}{\ln(2)}}$ the two differ only buy a constant factor anyways.</p>
+			there is no necessity to use base 2, and as $\log_2(x) = {\frac {\ln(x)}{\ln(2)}}$ the two differ only by a constant factor anyways.</p>
 
 			<p>This example made use of cross-entropy as a loss function for a classification problem, but there are other types of machine learning models
-			where cross-entropy is useful, and perhaps an even more natural fit. GANs are a prime example of this. In a GAN, the generator network is
+			where cross-entropy is useful, and perhaps an even more natural fit. GANs (Generative Adversarial Networks) are a prime example of this. In a GAN, the generator network is
 			trying to learn the probability distribution of the real data and the discriminator network is trying distinguish between data points that
 			were generated from the real data versus the generator network. The entire goal of GANs hinges on learning to replicate a latent probability
 			distribution, so it is very natural to use a measure of distance or difference between probability distributions such as cross-entropy as a
@@ -420,7 +420,7 @@
 
 			<p>If you've seen cross-entropy loss functions used in machine learning, chances are you've also come across binary cross-entropy before.
 			Binary cross-entropy isn't anything new from what we've discussed so far, rather it is just a special formulation of cross-entropy for
-			a binary problem (hence the name), i.e 0 or 1, yes or no. If you are predicting just two categories - we'll use "yes" and "no" - then
+			a binary problem (hence the name), i.e. 0 or 1, yes or no. If you are predicting just two categories - we'll use "yes" and "no" - then
 			your cross-entropy looks like this
 
 			$$\begin{split}
@@ -436,9 +436,14 @@
 
 			$$H(P, Q) = -(P(yes)\log Q(yes)) + (1 - P(yes))\log (1 - Q(yes))$$</p>
 
-			<p>There are further concepts in information theory that are both fascinating, and of great importance in machine learning, but
-			I'll leave that for you to explore on your own, or perhaps another post. if you want to do some digging, some terms to check out
-			are: mutual information, Jensen-Shannon divergence, joint entropy, and conditional entropy.</p>
+			<p>There are further concepts in information theory that are both fascinating, and of great importance in machine learning, that are
+      well worth digging into. Some terms to check out for those curious are: mutual information, Jensen-Shannon divergence, joint entropy, and conditional entropy.</p>
+
+      <p>I should also note that like most mathematical concepts, entropy and cross-entropy are remarkably multi-faceted and can be looked at from a wide variety of
+        different perspectives. I've tried to give an explanation that is useful for me in building intuition, but there are also ways to think about cross-entropy
+        in machine learning from a Bayesian perspective for example. I am also not an expert in information theory by any means, so it is likely I've missed some
+        important points in my explanation. That being said, I hope it helps to provide some intuition for what is going on in the sometimes esoteric looking sums
+        involving $P$s, $Q$s and $log$s.
 
 			<p>In case you missed it, the first post in these series of two introduces the notion of <a href="entropy">entropy.<a></p>
 
@@ -480,7 +485,7 @@
                 </a>
               </li>
             </ul>
-            <p class="copyright text-muted">Copyright &copy; lpeetpare.github.io 2020</p>
+            <!--  <p class="copyright text-muted">Copyright &copy; lpeetpare.github.io 2020</p> -->
           </div>
         </div>
       </div>
