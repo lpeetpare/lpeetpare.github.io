@@ -436,6 +436,6 @@ footer .copyright {
     border-style: solid;
     border-width: 2px;
     border-color: black;
-    border-radius: 100px;
-    max-width: 200px;
+    border-radius: 125px;
+    max-width: 250px;
 }
