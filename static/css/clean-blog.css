@@ -433,7 +433,7 @@ footer .copyright {
 
 
 .dp {
-    border-style: solid;
+    border-style: none;
     border-width: 2px;
     border-color: black;
     border-radius: 125px;
