@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Regulatory Form Automation · Liam Peet-Paré</title>
+<meta name="description" content="Parses a regulatory form into a schema, scans a client's documents against it, and produces a status checklist and draft attachments.">
+<script>(function(){try{var t=localStorage.getItem("theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<link rel="stylesheet" href="/assets/css/site.css">
+<script src="/assets/js/theme.js" defer></script>
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">
+      <img class="brand-mark aiw" src="/assets/img/aiw/hatter.jpg" alt="">
+      <span>Liam Peet-Paré</span>
+    </a>
+    <div class="header-right">
+      <nav class="nav">
+        <a href="/#prototypes" aria-current="page">Prototypes</a>
+        <a href="/#research">Research</a>
+        <a href="/writing.html">Writing</a>
+        <a href="/#contact">Contact</a>
+      </nav>
+      <button class="theme-toggle" type="button" aria-label="Switch theme" title="Switch theme">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.4v2.3M12 19.3v2.3M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.4 12h2.3M19.3 12h2.3M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <div class="wrap">
+    <div class="case-header">
+      <div class="case-head-grid">
+        <div class="prose">
+          <a class="backlink" href="/#prototypes">← Prototypes</a>
+          <p class="eyebrow">Prototype</p>
+          <h1>Regulatory Form Automation</h1>
+          <p class="lede">
+            A tool for responding to long regulatory forms. The form is parsed once into a
+            structured schema covering every field, question, and attachment requirement. The
+            client's existing documents are then scanned against that schema to determine which
+            items those documents already answer. The tool outputs a checklist showing the status
+            of every item, and generates Word drafts for the sections that require a document to be
+            written. It was built against a BC gaming regulator's corporate disclosure form, though
+            only the schema is form-specific.
+          </p>
+        </div>
+        <div class="case-motif">
+          <img class="aiw" src="/assets/img/aiw/rabbit-herald.jpg" alt="">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <dl class="factbox">
+      <div>
+        <dt>Input</dt>
+        <dd>A regulatory PDF, and a folder of client documents</dd>
+      </div>
+      <div>
+        <dt>Output</dt>
+        <dd>Excel status checklist, and Word attachment drafts</dd>
+      </div>
+      <div>
+        <dt>Form size</dt>
+        <dd>23 sections, 59 discrete items</dd>
+      </div>
+      <div>
+        <dt>Built</dt>
+        <dd>2026</dd>
+      </div>
+    </dl>
+  </div>
+
+  <section>
+    <div class="wrap">
+      <div class="prose">
+        <h2>Why I built it</h2>
+        <p>
+          Regulatory registration work is mostly matching. The form is long, the questions are
+          largely factual, and the client has usually already produced the underlying facts for some
+          other purpose — a certificate of incorporation, a registry search, a share register, last
+          year's audited financials. Someone has to read the form against that pile of documents and
+          determine what is already answered, what requires a document the client has not sent, and
+          what cannot be answered from documents at all.
+        </p>
+        <p>
+          Done manually, working a form of this size against a folder of client records is a task
+          measured in hours, and it starts over with each new applicant. The tool does that first
+          pass in a few minutes, and the schema it produces is reused for every subsequent applicant
+          on the same form.
+        </p>
+        <p>
+          The gaming form is a good test case because it reaches through the applicant to parent
+          companies, interest holders, and related entities, so even a straightforward corporation
+          produces a substantial disclosure package.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="prose">
+        <h2>Pipeline</h2>
+      </div>
+
+      <div class="diagram">
+        <svg viewBox="0 0 940 232" role="img" aria-labelledby="rf-title rf-desc">
+          <title id="rf-title">The regulatory form pipeline</title>
+          <desc id="rf-desc">The form PDF becomes a schema; client documents are scanned against it; the joined result produces a checklist and attachment drafts.</desc>
+          <defs>
+            <marker id="rfar" viewBox="0 0 10 10" refX="9" refY="5"
+                    markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+            </marker>
+          </defs>
+
+          <g fill="none" stroke="var(--text-faint)" stroke-width="1.25"
+             color="var(--text-faint)" marker-end="url(#rfar)">
+            <line x1="228" y1="46" x2="316" y2="46"/>
+            <line x1="228" y1="140" x2="316" y2="140"/>
+            <line x1="484" y1="46"  x2="560" y2="80"/>
+            <line x1="484" y1="140" x2="560" y2="106"/>
+            <line x1="728" y1="93" x2="792" y2="58"/>
+            <line x1="728" y1="93" x2="792" y2="128"/>
+          </g>
+
+          <g font-family="-apple-system, Segoe UI, Roboto, sans-serif">
+            <g>
+              <rect x="8" y="18" width="220" height="56" rx="5"
+                    fill="none" stroke="var(--rule-strong)" stroke-width="1.25"/>
+              <text x="118" y="42" text-anchor="middle" font-size="13" font-weight="650" fill="var(--text)">Regulatory PDF</text>
+              <text x="118" y="60" text-anchor="middle" font-size="11.5" fill="var(--text-muted)">the blank form</text>
+            </g>
+            <g>
+              <rect x="8" y="112" width="220" height="56" rx="5"
+                    fill="none" stroke="var(--rule-strong)" stroke-width="1.25"/>
+              <text x="118" y="136" text-anchor="middle" font-size="13" font-weight="650" fill="var(--text)">Client records</text>
+              <text x="118" y="154" text-anchor="middle" font-size="11.5" fill="var(--text-muted)">whatever they already have</text>
+            </g>
+
+            <g>
+              <rect x="328" y="18" width="156" height="56" rx="5"
+                    fill="var(--bg-sunken)" stroke="var(--accent)" stroke-width="1.5"/>
+              <text x="406" y="42" text-anchor="middle" font-size="13" font-weight="650" fill="var(--accent)">Schema</text>
+              <text x="406" y="60" text-anchor="middle" font-size="11.5" fill="var(--text-muted)">59 items, typed</text>
+            </g>
+            <g>
+              <rect x="328" y="112" width="156" height="56" rx="5"
+                    fill="none" stroke="var(--rule-strong)" stroke-width="1.25"/>
+              <text x="406" y="136" text-anchor="middle" font-size="13" font-weight="650" fill="var(--text)">Scan</text>
+              <text x="406" y="154" text-anchor="middle" font-size="11.5" fill="var(--text-muted)">per document</text>
+            </g>
+
+            <g>
+              <rect x="572" y="65" width="156" height="56" rx="5"
+                    fill="var(--bg-sunken)" stroke="var(--accent)" stroke-width="1.5"/>
+              <text x="650" y="89" text-anchor="middle" font-size="13" font-weight="650" fill="var(--accent)">Client state</text>
+              <text x="650" y="107" text-anchor="middle" font-size="11.5" fill="var(--text-muted)">status per item</text>
+            </g>
+
+            <g>
+              <rect x="804" y="30" width="128" height="56" rx="5"
+                    fill="none" stroke="var(--rule-strong)" stroke-width="1.25"/>
+              <text x="868" y="54" text-anchor="middle" font-size="13" font-weight="650" fill="var(--text)">Checklist</text>
+              <text x="868" y="72" text-anchor="middle" font-size="11.5" fill="var(--text-muted)">.xlsx</text>
+            </g>
+            <g>
+              <rect x="804" y="100" width="128" height="56" rx="5"
+                    fill="none" stroke="var(--rule-strong)" stroke-width="1.25"/>
+              <text x="868" y="124" text-anchor="middle" font-size="13" font-weight="650" fill="var(--text)">Attachments</text>
+              <text x="868" y="142" text-anchor="middle" font-size="11.5" fill="var(--text-muted)">.docx drafts</text>
+            </g>
+
+            <text x="406" y="205" text-anchor="middle" font-size="11.5" fill="var(--text-faint)">
+              The schema is parsed once per form and reused for every client.
+            </text>
+          </g>
+        </svg>
+      </div>
+
+      <div class="prose">
+        <p>
+          Parsing the form is the expensive step, and it only happens once. pdfplumber extracts the
+          text of the PDF, and an LLM turns that into a JSON schema with one entry per field,
+          question, and attachment requirement. Each entry is typed as structured data (a field with
+          a value), conditional (a yes/no question that opens up further requirements), or always
+          attach (a document required regardless), and records the document types that would satisfy
+          it. Everything downstream reads the schema rather than the form, so covering a second
+          regulator means parsing a second PDF.
+        </p>
+        <p>
+          The scan is the per-client step. Every PDF and Word document in the client's folder is read
+          and compared against the schema, and the tool writes a status for each item along with the
+          source file and the extracted value. Items come out as satisfied, partial, not found, or
+          needs input. Needs input is reserved for the conditional questions, which require an answer
+          from the client rather than a document — whether any related entity has had a licence
+          refused in the past five years, for example.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="prose">
+        <h2>Output</h2>
+        <p>
+          Run against a sample company with five corporate documents on file, the 59-item form comes
+          out as 23 satisfied, 1 partial, 28 not found, and 7 needing input. Roughly 40% of the form
+          is answerable from documents already held, and the checklist records which items those are
+          and which file each answer came from.
+        </p>
+      </div>
+
+      <figure>
+        <img src="/assets/img/work/regulatory-forms/checklist-thumb.png"
+             alt="The generated checklist, one row per form item, colour-coded by status">
+        <figcaption>
+          The checklist. One row per item, with the status, the source document and the extracted
+          value.
+        </figcaption>
+      </figure>
+
+      <div class="prose">
+        <p>
+          Twelve of the sections require a document to be written rather than an existing record —
+          a schedule of current gaming licences, a business relationship chart, a statement of
+          outstanding claims. The tool generates a Word document for each, drafted from the scanned
+          material where the scan found something to work from, and otherwise a structured skeleton
+          with placeholders for the lawyer to complete. On this sample all twelve come out as
+          skeletons, since the sections requiring a generated attachment are the ones the client's
+          five documents say nothing about.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="prose">
+        <h2>How it was built</h2>
+        <p>
+          Built in Python with the help of Claude Code.
+          Source is not public, but I am happy to walk through it.
+        </p>
+      </div>
+      <div class="btn-row">
+        <a class="btn" href="/prototypes/domain-check.html">Domain Portfolio Check →</a>
+        <a class="btn" href="/#contact">Get in touch</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>© Liam Peet-Paré</div>
+    <div><a href="/#prototypes">All prototypes</a></div>
+  </div>
+</footer>
+
+</body>
+</html>

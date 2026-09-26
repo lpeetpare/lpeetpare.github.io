@@ -1,0 +1,540 @@
+/* ---------------------------------------------------------------------------
+   Garnet Liam Peet-Paré — site styles
+   Single stylesheet; no build step, no framework.
+   --------------------------------------------------------------------------- */
+
+:root {
+  --bg:            #fbfaf8;
+  --bg-raised:     #ffffff;
+  --bg-sunken:     #f2efea;
+  --text:          #16202c;
+  --text-muted:    #5b6673;
+  --text-faint:    #8a939e;
+  --accent:        #1a3a5c;
+  --accent-soft:   #2e5a86;
+  --rule:          #e2ddd5;
+  --rule-strong:   #cfc8bd;
+
+  --ok:            #2e7d32;
+  --ok-bg:         #e8f5e9;
+  --warn:          #b26a00;
+  --warn-bg:       #fff6e2;
+  --bad:           #b3261e;
+  --bad-bg:        #fbe9e7;
+  --info:          #4a5a6a;
+  --info-bg:       #eceff2;
+
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+
+  color-scheme: light;
+
+  --measure: 41rem;
+  --wide: 68rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg:          #14171b;
+    --bg-raised:   #1c2026;
+    --bg-sunken:   #23282f;
+    --text:        #e8e6e3;
+    --text-muted:  #a8b0ba;
+    --text-faint:  #7c848e;
+    --accent:      #8fb8de;
+    --accent-soft: #a9cbeb;
+    --rule:        #2d333b;
+    --rule-strong: #3d444d;
+
+    --ok:   #86d492;  --ok-bg:   #16261a;
+    --warn: #e8b569;  --warn-bg: #2a2114;
+    --bad:  #f0928a;  --bad-bg:  #2c1a18;
+    --info: #a3adb8;  --info-bg: #232830;
+  }
+}
+
+/* The same palette when the visitor has forced dark with the header toggle. */
+:root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg:          #14171b;
+    --bg-raised:   #1c2026;
+    --bg-sunken:   #23282f;
+    --text:        #e8e6e3;
+    --text-muted:  #a8b0ba;
+    --text-faint:  #7c848e;
+    --accent:      #8fb8de;
+    --accent-soft: #a9cbeb;
+    --rule:        #2d333b;
+    --rule-strong: #3d444d;
+
+    --ok:   #86d492;  --ok-bg:   #16261a;
+    --warn: #e8b569;  --warn-bg: #2a2114;
+    --bad:  #f0928a;  --bad-bg:  #2c1a18;
+    --info: #a3adb8;  --info-bg: #232830;
+}
+
+/* Engravings are drawn for a white ground; invert them on a dark one. */
+:root[data-theme="dark"] .aiw {
+  mix-blend-mode: screen;
+  filter: invert(1);
+  opacity: 0.62;
+}
+
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { max-width: 100%; height: auto; }
+
+a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+a:hover { color: var(--accent-soft); }
+
+/* Co-author names. Unadorned at rest so a citation line reads as a citation
+   rather than as a row of links; underlined on hover to show they are links. */
+a.name { text-decoration: none; }
+a.name:hover,
+a.name:focus { text-decoration: underline; }
+
+/* --- Layout ------------------------------------------------------------- */
+
+.wrap { width: 100%; max-width: var(--wide); margin: 0 auto; padding: 0 1.5rem; }
+.prose { max-width: var(--measure); }
+
+section { padding: 3.5rem 0; border-top: 1px solid var(--rule); }
+section:first-of-type { border-top: 0; }
+
+/* The intro carries no heading, so it should read as a continuation of the
+   hero rather than as a separate band with a hole where a title would be. */
+section.intro { padding-top: 0.5rem; }
+
+/* --- Header / nav -------------------------------------------------------- */
+
+.site-header {
+  position: sticky; top: 0; z-index: 20;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: saturate(1.6) blur(10px);
+  border-bottom: 1px solid var(--rule);
+}
+.site-header .wrap {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; min-height: 3.75rem;
+}
+.brand {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  font-family: var(--serif);
+  font-size: 1.0625rem; font-weight: 600; letter-spacing: 0.01em;
+  color: var(--text); text-decoration: none; white-space: nowrap;
+}
+.brand:hover { color: var(--accent); }
+.brand-mark {
+  height: 2.35rem; width: auto; flex: none;
+  transition: transform .18s ease;
+}
+.brand:hover .brand-mark { transform: translateY(-2px) rotate(-3deg); }
+
+.nav { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+.nav a {
+  color: var(--text-muted); text-decoration: none;
+  font-size: 0.9375rem; padding: 0.25rem 0;
+  border-bottom: 2px solid transparent;
+}
+
+.nav a:hover, .nav a[aria-current="page"] { color: var(--text); border-bottom-color: var(--accent); }
+
+/* --- Hero ---------------------------------------------------------------- */
+
+.hero { padding: 4.5rem 0 2rem; }
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(2.1rem, 5.2vw, 3.1rem);
+  line-height: 1.12; letter-spacing: -0.015em;
+  margin: 0 0 1rem;
+}
+.hero .standfirst {
+  font-size: clamp(1.1rem, 2.2vw, 1.3rem);
+  line-height: 1.5; color: var(--text-muted);
+  max-width: 34rem; margin: 0 0 1.75rem;
+}
+.hero-grid {
+  display: grid; grid-template-columns: 1fr; gap: 2.5rem; align-items: start;
+}
+@media (min-width: 56rem) {
+  .hero-grid { grid-template-columns: minmax(0, 1fr) 15rem; gap: 3.5rem; }
+}
+.portrait {
+  width: 100%; max-width: 15rem; height: auto;
+  border-radius: 4px;
+  border: 1px solid var(--rule-strong);
+  /* Shot on white, which would otherwise dissolve into the page ground. */
+  background: #fff;
+}
+@media (min-width: 56rem) {
+  /* Align the top of the portrait with the top of the opening paragraph, i.e.
+     drop it past the h1. Measured at 71.5px below the grid top. */
+  .portrait { margin-top: 4.47rem; }
+}
+
+/* --- Typography ---------------------------------------------------------- */
+
+h2 {
+  font-family: var(--serif);
+  font-size: clamp(1.45rem, 3vw, 1.8rem); line-height: 1.22;
+  letter-spacing: -0.01em; margin: 0 0 1.25rem;
+}
+h3 {
+  font-size: 1.0625rem; font-weight: 650; letter-spacing: 0.005em;
+  margin: 2rem 0 0.6rem;
+}
+p { margin: 0 0 1.1rem; }
+.prose > p:last-child { margin-bottom: 0; }
+
+.eyebrow {
+  font-size: 0.75rem; font-weight: 650; letter-spacing: 0.11em;
+  text-transform: uppercase; color: var(--text-faint);
+  margin: 0 0 0.85rem;
+}
+.lede { font-size: 1.15rem; line-height: 1.55; color: var(--text-muted); }
+.small { font-size: 0.9375rem; }
+.muted { color: var(--text-muted); }
+
+/* --- Theme toggle ---------------------------------------------------------- */
+
+.header-right { display: flex; align-items: center; gap: 1.25rem; margin-left: auto; }
+
+.theme-toggle {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 2rem; height: 2rem; padding: 0; flex: none;
+  background: none; border: 1px solid transparent; border-radius: 50%;
+  color: var(--text-muted); cursor: pointer;
+  transition: color .15s ease, border-color .15s ease, background-color .15s ease;
+}
+.theme-toggle:hover { color: var(--text); border-color: var(--rule); background: var(--bg-sunken); }
+.theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.theme-toggle svg { width: 1.0625rem; height: 1.0625rem; display: block; }
+
+/* Show the icon for the theme you would switch TO. */
+.theme-toggle .icon-sun { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-toggle .icon-sun { display: block; }
+  :root:not([data-theme="light"]) .theme-toggle .icon-moon { display: none; }
+}
+:root[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+:root[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+:root[data-theme="light"] .theme-toggle .icon-sun { display: none; }
+:root[data-theme="light"] .theme-toggle .icon-moon { display: block; }
+
+/* The brand (165px), nav (303px) and toggle (32px) plus padding and gaps need about
+   584px to share a row. Below that, put the brand and the toggle on the first row and
+   give the nav the second one to itself. */
+@media (max-width: 38rem) {
+  .site-header .wrap {
+    flex-wrap: wrap; align-items: center;
+    row-gap: 0.2rem; column-gap: 0.75rem;
+    min-height: 0; padding-top: 0.5rem; padding-bottom: 0.5rem;
+  }
+  .header-right { display: contents; }
+  .site-header .nav { order: 3; width: 100%; gap: 1.15rem; }
+  .theme-toggle { order: 2; margin-left: auto; }
+  .brand-mark { height: 1.9rem; }
+  .brand { font-size: 1rem; }
+}
+
+/* --- Work cards ---------------------------------------------------------- */
+
+.card-grid {
+  display: grid; gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+}
+.card {
+  display: flex; flex-direction: column;
+  background: var(--bg-raised);
+  border: 1px solid var(--rule); border-radius: 6px;
+  overflow: hidden; text-decoration: none; color: inherit;
+  transition: border-color .15s ease, transform .15s ease, box-shadow .15s ease;
+}
+.card:hover {
+  border-color: var(--rule-strong);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px -10px rgba(0,0,0,.28);
+  color: inherit;
+}
+.card-thumb {
+  display: block; width: 100%; aspect-ratio: 16 / 9;
+  object-fit: cover; object-position: top left;
+  background: var(--bg-sunken); border-bottom: 1px solid var(--rule);
+}
+.card-body { padding: 1.15rem 1.25rem 1.35rem; }
+.card h3 { margin: 0 0 0.4rem; font-size: 1.0625rem; font-weight: 650; }
+.card p { margin: 0; font-size: 0.9375rem; color: var(--text-muted); line-height: 1.55; }
+.card .tag-row { margin-top: 0.9rem; }
+
+.tag {
+  display: inline-block; font-size: 0.6875rem; font-weight: 600;
+  letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--text-muted); background: var(--bg-sunken);
+  border: 1px solid var(--rule); border-radius: 100px;
+  padding: 0.15rem 0.6rem; margin: 0 0.3rem 0.3rem 0;
+}
+
+/* --- Lists --------------------------------------------------------------- */
+
+.stack { list-style: none; margin: 1.25rem 0 0; padding: 0; }
+.stack > li {
+  padding: 1.1rem 0; border-top: 1px solid var(--rule);
+}
+.stack > li:first-child { border-top: 0; padding-top: 0; }
+.stack .title { font-weight: 620; }
+.stack .meta { color: var(--text-muted); font-size: 0.9375rem; }
+
+.bullets { padding-left: 1.15rem; margin: 0 0 1.1rem; }
+.bullets li { margin-bottom: 0.45rem; }
+
+/* --- Case study ---------------------------------------------------------- */
+
+.case-header { padding: 3.25rem 0 1rem; }
+.case-header h1 {
+  font-family: var(--serif);
+  font-size: clamp(1.9rem, 4.4vw, 2.6rem); line-height: 1.15;
+  letter-spacing: -0.015em; margin: 0 0 0.85rem;
+}
+
+.factbox {
+  display: grid; gap: 1.25rem 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  padding: 1.4rem 1.5rem;
+  background: var(--bg-raised);
+  border: 1px solid var(--rule); border-radius: 6px;
+  margin: 2rem 0;
+}
+.factbox dt {
+  font-size: 0.7rem; font-weight: 650; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--text-faint); margin-bottom: 0.3rem;
+}
+.factbox dd { margin: 0; font-size: 0.9375rem; line-height: 1.5; }
+
+figure { margin: 2.25rem 0; }
+figure img {
+  display: block; width: 100%;
+  border: 1px solid var(--rule); border-radius: 6px;
+  background: var(--bg-raised);
+}
+figcaption {
+  margin-top: 0.7rem; font-size: 0.875rem; line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.callout {
+  border-left: 3px solid var(--rule-strong);
+  padding: 0.15rem 0 0.15rem 1.15rem;
+  margin: 1.75rem 0; color: var(--text-muted);
+}
+.callout strong { color: var(--text); }
+
+/* --- Archived essays ----------------------------------------------------- */
+
+.post { max-width: var(--measure); }
+.post p { margin: 0 0 1.15rem; }
+.post h2 {
+  font-family: var(--serif);
+  font-size: clamp(1.3rem, 2.6vw, 1.55rem); line-height: 1.25;
+  margin: 2.75rem 0 1rem;
+}
+.post h3 { margin: 2rem 0 0.6rem; }
+.post ul, .post ol { padding-left: 1.25rem; margin: 0 0 1.15rem; }
+.post li { margin-bottom: 0.45rem; }
+.post img {
+  display: block; width: 100%; height: auto;
+  margin: 1.75rem auto 0.5rem;
+  border: 1px solid var(--rule); border-radius: 4px;
+}
+.post .caption, .post figcaption {
+  display: block; text-align: center;
+  font-size: 0.875rem; color: var(--text-muted);
+  margin: 0 0 1.75rem;
+}
+.post blockquote {
+  margin: 1.75rem 0; padding: 0.15rem 0 0.15rem 1.15rem;
+  border-left: 3px solid var(--rule-strong); color: var(--text-muted);
+}
+.post hr { border: 0; border-top: 1px solid var(--rule); margin: 2.5rem 0; }
+.post a { overflow-wrap: anywhere; }
+/* Display equations can be wider than the measure on small screens. */
+.post mjx-container[display="true"],
+.post .MathJax_Display { overflow-x: auto; overflow-y: hidden; max-width: 100%; }
+
+/* --- Data tables --------------------------------------------------------- */
+
+.table-scroll { overflow-x: auto; margin: 1.75rem 0; }
+table.data {
+  border-collapse: collapse; width: 100%;
+  font-size: 0.875rem; line-height: 1.45;
+}
+table.data th, table.data td {
+  text-align: left; vertical-align: top;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--rule);
+}
+table.data th {
+  font-size: 0.6875rem; font-weight: 650; letter-spacing: 0.07em;
+  text-transform: uppercase; color: var(--text-faint);
+  border-bottom: 1px solid var(--rule-strong); white-space: nowrap;
+}
+table.data td { color: var(--text-muted); }
+table.data td:first-child { color: var(--text); font-weight: 550; white-space: nowrap; }
+
+.pill {
+  display: inline-block; white-space: nowrap;
+  font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.04em;
+  border-radius: 100px; padding: 0.12rem 0.55rem;
+}
+.pill-ok   { color: var(--ok);   background: var(--ok-bg); }
+.pill-warn { color: var(--warn); background: var(--warn-bg); }
+.pill-bad  { color: var(--bad);  background: var(--bad-bg); }
+.pill-info { color: var(--info); background: var(--info-bg); }
+
+/* --- Tenniel illustrations ----------------------------------------------- */
+
+/* The engravings are black line art on a white ground. `multiply` drops that
+   white into the page colour so they sit on the paper instead of in a box;
+   in dark mode the image is inverted and screened for the same effect. */
+/* Sizing is left to each usage so the header mark can size independently. */
+.aiw {
+  display: block;
+  mix-blend-mode: multiply;
+  opacity: 0.9;
+}
+/* Cap the height too: a tall engraving would otherwise set the header row's
+   height and leave a hole under a short title block. */
+.case-motif img.aiw {
+  max-width: 100%; max-height: 13.5rem;
+  width: auto; margin-left: auto;
+}
+/* Screenshots get a framed card; the engravings must not — the generic
+   `figure img` border would draw a box around the blended-out white ground. */
+figure img.aiw { border: 0; border-radius: 0; background: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .aiw {
+    mix-blend-mode: screen;
+    filter: invert(1);
+    opacity: 0.62;
+  }
+}
+
+/* Case-study header: title block with a motif alongside it. Unlabelled, so it
+   reads as part of the page rather than as an exhibit. */
+.case-head-grid { display: grid; gap: 1.25rem; grid-template-columns: 1fr; }
+@media (min-width: 56rem) {
+  .case-head-grid {
+    grid-template-columns: minmax(0, 1fr) 11rem;
+    gap: 3.5rem; align-items: center;
+  }
+}
+.case-motif { max-width: 11rem; }
+@media (max-width: 55.99rem) {
+  /* On narrow screens it would only push the text down; keep it small and left. */
+  .case-motif { max-width: 7.5rem; }
+}
+
+/* Ornament — beside the education block on wide screens, below it on narrow */
+.ornament { text-align: center; }
+.ornament img { width: min(100%, 20rem); margin: 0 auto; }
+
+.edu-grid { display: grid; gap: 2rem; grid-template-columns: 1fr; }
+@media (min-width: 56rem) {
+  .edu-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(14rem, 20rem);
+    gap: 3rem; align-items: center;
+  }
+  .edu-grid .ornament img { width: 100%; }
+}
+
+/* --- Education ----------------------------------------------------------- */
+
+.edu { list-style: none; margin: 0; padding: 0; max-width: var(--measure); }
+.edu > li {
+  display: grid; gap: 0.15rem 1.5rem;
+  grid-template-columns: 1fr;
+  padding: 0.9rem 0; border-top: 1px solid var(--rule);
+}
+.edu > li:first-child { border-top: 0; padding-top: 0; }
+@media (min-width: 40rem) {
+  .edu > li { grid-template-columns: minmax(0, 1fr) 4rem; align-items: baseline; }
+  .edu .edu-year { text-align: right; }
+}
+.edu .edu-degree { font-weight: 620; }
+.edu .edu-year { color: var(--text-faint); font-size: 0.9375rem; font-variant-numeric: tabular-nums; }
+.edu .edu-school { color: var(--text-muted); font-size: 0.9375rem; grid-column: 1; }
+
+/* --- Pipeline diagram ---------------------------------------------------- */
+
+.diagram { margin: 2.25rem 0; }
+.diagram svg { display: block; width: 100%; height: auto; }
+
+/* --- Buttons / links ----------------------------------------------------- */
+
+.btn-row { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; }
+.btn {
+  display: inline-block; text-decoration: none;
+  font-size: 0.9375rem; font-weight: 560;
+  padding: 0.55rem 1.1rem; border-radius: 4px;
+  border: 1px solid var(--accent); color: var(--accent);
+  background: transparent; transition: background .15s ease, color .15s ease;
+}
+.btn:hover { background: var(--accent); color: var(--bg-raised); }
+.btn-primary { background: var(--accent); color: var(--bg-raised); }
+.btn-primary:hover { background: var(--accent-soft); border-color: var(--accent-soft); color: var(--bg-raised); }
+
+.backlink {
+  display: inline-block; font-size: 0.875rem;
+  color: var(--text-muted); text-decoration: none; margin-bottom: 1.5rem;
+}
+.backlink:hover { color: var(--accent); }
+
+/* Employer disclaimer. Closes the bio, at full body size rather than as fine
+   print, with a rule above it so it reads as a separate statement. */
+p.disclaimer {
+  margin-top: 1.75rem; padding-top: 1.25rem;
+  border-top: 1px solid var(--rule-strong);
+  color: var(--text);
+}
+
+/* --- Footer -------------------------------------------------------------- */
+
+.site-footer {
+  border-top: 1px solid var(--rule);
+  padding: 2.5rem 0 3.5rem;
+  font-size: 0.9375rem; color: var(--text-muted);
+}
+.site-footer .wrap {
+  display: flex; flex-wrap: wrap; gap: 1rem 2rem;
+  align-items: baseline; justify-content: space-between;
+}
+.site-footer a { color: var(--text-muted); }
+.site-footer a:hover { color: var(--accent); }
+
+/* --- Utility ------------------------------------------------------------- */
+
+.skip {
+  position: absolute; left: -9999px;
+  background: var(--bg-raised); color: var(--text);
+  padding: 0.6rem 1rem; border: 1px solid var(--rule); border-radius: 4px;
+}
+.skip:focus { left: 1rem; top: 0.6rem; z-index: 50; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition: none !important; }
+}

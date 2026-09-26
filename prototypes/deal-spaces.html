@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deal spaces · Liam Peet-Paré</title>
+<meta name="description" content="A prototype closing workspace: a shared closing agenda and document room for the firms on a deal, with version history and redlines.">
+<script>(function(){try{var t=localStorage.getItem("theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<link rel="stylesheet" href="/assets/css/site.css">
+<script src="/assets/js/theme.js" defer></script>
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">
+      <img class="brand-mark aiw" src="/assets/img/aiw/hatter.jpg" alt="">
+      <span>Liam Peet-Paré</span>
+    </a>
+    <div class="header-right">
+      <nav class="nav">
+        <a href="/#prototypes" aria-current="page">Prototypes</a>
+        <a href="/#research">Research</a>
+        <a href="/writing.html">Writing</a>
+        <a href="/#contact">Contact</a>
+      </nav>
+      <button class="theme-toggle" type="button" aria-label="Switch theme" title="Switch theme">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.4v2.3M12 19.3v2.3M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.4 12h2.3M19.3 12h2.3M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <div class="wrap">
+    <div class="case-header">
+      <div class="case-head-grid">
+        <div class="prose">
+          <a class="backlink" href="/#prototypes">← Prototypes</a>
+          <p class="eyebrow">Prototype</p>
+          <h1>Deal spaces</h1>
+          <p class="lede">
+            A shared workspace for closing a transaction. Each deal space holds the closing agenda
+            and every document behind it. Each firm on the deal keeps its own working drafts private
+            until it chooses to circulate a version, at which point the version goes into a shared
+            negotiation record where every firm can see the history, open any version, and produce
+            a redline between any two.
+          </p>
+        </div>
+        <div class="case-motif">
+          <img class="aiw" src="/assets/img/aiw/footmen-letter.jpg" alt="">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <dl class="factbox">
+      <div>
+        <dt>Input</dt>
+        <dd>A closing agenda, and each firm's working drafts</dd>
+      </div>
+      <div>
+        <dt>Output</dt>
+        <dd>One shared agenda, a version history per item, Word blacklines</dd>
+      </div>
+      <div>
+        <dt>Parties</dt>
+        <dd>Any number of firms on one matter</dd>
+      </div>
+      <div>
+        <dt>Built</dt>
+        <dd>2026</dd>
+      </div>
+    </dl>
+  </div>
+
+  <section>
+    <div class="wrap">
+      <div class="prose">
+        <h2>Why I built it</h2>
+        <p>
+          Closing an M&amp;A transaction is run off a closing agenda: a long table of every document
+          and deliverable, who is responsible for it, who signs it, and where it stands. In practice
+          the agenda lives in a Word document that one firm owns and re-circulates, the drafts
+          themselves travel by email, and version control comes down to filename conventions and
+          memory. Working out which draft is current, what changed since the other side's last turn,
+          and whether the agenda reflects any of it takes a surprising share of a junior lawyer's
+          time in the last weeks of a deal.
+        </p>
+        <p>
+          In a complex deal with multiple parties across several jurisdictions, just managing the closing 
+          agenda and deliverables can take literally hundreds of hours in legal time, which equates to
+          a very expensive bill for clients. Managing the endless versions and markups is not high-value legal work; it is merely an artifact of using software and tools that are not appropriate 
+          for the task.
+        </p>
+        <p>
+          The tool puts the agenda and the documents in one place, so that the status of an item,
+          its current draft, and the history of how it got there live in the same record, rather than relying on
+          lawyers sending email attachments, managing complex version control, and constantly integrating 
+          comments from all the different parties, local and opposing counsel included.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="prose">
+        <h2>What it does</h2>
+        <p>
+          A deal space is created per matter. The prototype seeds one matter with three firms —
+          buyer's counsel, seller's counsel and local counsel — and a switcher in the top bar stands
+          in for login, so the tool can be viewed as any user at any firm.
+        </p>
+      </div>
+
+      <figure>
+        <img src="/assets/img/work/deal-spaces/01-home.png"
+             alt="The home screen, listing one matter and a form to create a new deal space">
+        <figcaption>Matters.</figcaption>
+      </figure>
+
+      <div class="prose">
+        <p>
+          The agenda is an editable table. Rows nest (I, I.1, II.3.a), the columns are customisable,
+          and each row carries its responsible party, signatories and status. Where a document has
+          been uploaded against a row, the row shows its current version, the number of versions
+          behind it, and a link into the shared review thread.
+        </p>
+      </div>
+
+      <figure>
+        <img src="/assets/img/work/deal-spaces/02-agenda.png"
+             alt="The closing agenda: nested rows for principal agreements, corporate documents and financing, each with responsible party, signatories, status and linked documents">
+        <figcaption>The closing agenda.</figcaption>
+      </figure>
+
+      <div class="prose">
+        <p>
+          Each firm has a private box of documents. Drafts and new versions can be uploaded there
+          without any other firm seeing them. Circulating a version pushes it into Under Review,
+          where it becomes visible to every firm on the matter.
+        </p>
+      </div>
+
+      <figure>
+        <img src="/assets/img/work/deal-spaces/03-documents.png"
+             alt="Buyer's counsel's private document box, listing ten documents with their agenda item, version number and buttons to view, add a version or circulate">
+        <figcaption>One firm's private box.</figcaption>
+      </figure>
+
+      <figure>
+        <img src="/assets/img/work/deal-spaces/04-under-review.png"
+             alt="The Under Review view for the merger agreement, listing five circulated versions alternating between buyer's and seller's counsel, each with a note and timestamp">
+        <figcaption>
+          The shared record for one agenda item: every circulated version, who sent it, and their
+          covering note.
+        </figcaption>
+      </figure>
+
+      <div class="prose">
+        <p>
+          Any version can be opened in the browser. From the same viewer, any two circulated
+          versions can be redlined against each other, and the redline downloaded as a Word
+          blackline.
+        </p>
+      </div>
+
+      <figure>
+        <img src="/assets/img/work/deal-spaces/05-redline.png"
+             alt="The document viewer in redline mode, comparing the seller's fourth draft to the buyer's fifth, with insertions and deletions marked and a button to download the blackline as Word">
+        <figcaption>A redline between the two sides' latest turns.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="prose">
+        <h2>How it was built</h2>
+        <p>
+          Built in Python and React with the help of Claude Code.
+          Source is not public, but I am happy to walk through it.
+        </p>
+      </div>
+      <div class="btn-row">
+        <a class="btn" href="/prototypes/regulatory-forms.html">Regulatory Form Automation →</a>
+        <a class="btn" href="/#contact">Get in touch</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>© Liam Peet-Paré</div>
+    <div><a href="/#prototypes">All prototypes</a></div>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Due diligence automation · Liam Peet-Paré</title>
+<meta name="description" content="A buy-side M&A due diligence prototype: parallel per-document LLM extraction against a user-defined schema, with a substitutable model backend.">
+<script>(function(){try{var t=localStorage.getItem("theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<link rel="stylesheet" href="/assets/css/site.css">
+<script src="/assets/js/theme.js" defer></script>
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">
+      <img class="brand-mark aiw" src="/assets/img/aiw/hatter.jpg" alt="">
+      <span>Liam Peet-Paré</span>
+    </a>
+    <div class="header-right">
+      <nav class="nav">
+        <a href="/#prototypes" aria-current="page">Prototypes</a>
+        <a href="/#research">Research</a>
+        <a href="/writing.html">Writing</a>
+        <a href="/#contact">Contact</a>
+      </nav>
+      <button class="theme-toggle" type="button" aria-label="Switch theme" title="Switch theme">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.4v2.3M12 19.3v2.3M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.4 12h2.3M19.3 12h2.3M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <div class="wrap">
+    <div class="case-header">
+      <div class="case-head-grid">
+        <div class="prose">
+          <a class="backlink" href="/#prototypes">← Prototypes</a>
+          <p class="eyebrow">Prototype</p>
+          <h1>Due diligence automation</h1>
+          <p class="lede">
+            Buy-side M&amp;A due diligence tool that could also be used for other high volume
+            review tasks. You define the deal context, the information you want extracted,
+            and point the tool at a folder containing the relevant documents. The tool crawls
+            through the folder, parsing, hashing, and deduplicating documents, and then extracts
+            the information that the user defined. It runs in parallel, making API calls to LLMs
+            for each document, with the backend fully substitutable. The output then exports to
+            the file type the user desires.
+          </p>
+        </div>
+        <div class="case-motif">
+          <img class="aiw" src="/assets/img/aiw/caterpillar.jpg" alt="">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <dl class="factbox">
+      <div>
+        <dt>Input</dt>
+        <dd>A folder of agreements (PDF, DOCX, XLSX)</dd>
+      </div>
+      <div>
+        <dt>Output</dt>
+        <dd>Structured due diligence table, exported to Excel or Word</dd>
+      </div>
+      <div>
+        <dt>Models</dt>
+        <dd>Anthropic, OpenAI or Gemini behind one interface</dd>
+      </div>
+      <div>
+        <dt>Built</dt>
+        <dd>2026</dd>
+      </div>
+    </dl>
+  </div>
+
+  <section>
+    <div class="wrap">
+      <div class="prose">
+        <h2>Why I built it</h2>
+        <p>
+          On a buy-side deal, the diligence review is extremely time-consuming,
+          and hence expensive for clients. Modern LLMs largely have the reasoning skills
+          necessary to extract the relevant information for a lawyer to then parse
+          and incorporate into a due diligence report. Trying to do this with a chatbot or
+          agent, like Copilot or Claude Cowork, saturates the agent's context window and is
+          error prone, time consuming, and token inefficient. This tool avoids those failure
+          modes by sending individual documents independently and in parallel via API call
+          to an LLM to perform the reasoning.
+        </p>
+        <p>
+          It is agnostic to the LLM backend, so allows for flexibility in model selection
+          and also enables the use of on-prem open weight models. LLMs are only drawn on
+          when and where reasoning is required, making the tool predictable and token-efficient.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="prose">
+        <h2>Pipeline</h2>
+      </div>
+
+      <div class="diagram">
+        <svg viewBox="0 0 940 168" role="img" aria-labelledby="pipe-title pipe-desc">
+          <title id="pipe-title">The due diligence pipeline</title>
+          <desc id="pipe-desc">Deal context and scope feed into ingestion, then LLM extraction, then export to Excel or Word.</desc>
+          <defs>
+            <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5"
+                    markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+            </marker>
+          </defs>
+          <g fill="none" stroke="var(--text-faint)" stroke-width="1.25"
+             color="var(--text-faint)" marker-end="url(#ar)">
+            <line x1="176" y1="62" x2="204" y2="62"/>
+            <line x1="356" y1="62" x2="384" y2="62"/>
+            <line x1="536" y1="62" x2="564" y2="62"/>
+            <line x1="716" y1="62" x2="744" y2="62"/>
+          </g>
+          <g font-family="-apple-system, Segoe UI, Roboto, sans-serif">
+            <g>
+              <rect x="8" y="24" width="168" height="76" rx="5"
+                    fill="none" stroke="var(--rule-strong)" stroke-width="1.25"/>
+              <text x="92" y="52" text-anchor="middle" font-size="13.5" font-weight="650" fill="var(--text)">1 · Deal context</text>
+              <text x="92" y="72" text-anchor="middle" font-size="11.5" fill="var(--text-muted)">Parties, governing law,</text>
+              <text x="92" y="87" text-anchor="middle" font-size="11.5" fill="var(--text-muted)">review instructions</text>
+            </g>
+            <g>
+              <rect x="188" y="24" width="168" height="76" rx="5"
+                    fill="none" stroke="var(--rule-strong)" stroke-width="1.25"/>
+              <text x="272" y="52" text-anchor="middle" font-size="13.5" font-weight="650" fill="var(--text)">2 · Scope</text>
+              <text x="272" y="72" text-anchor="middle" font-size="11.5" fill="var(--text-muted)">The columns to extract,</text>
+              <text x="272" y="87" text-anchor="middle" font-size="11.5" fill="var(--text-muted)">each with a description</text>
+            </g>
+            <g>
+              <rect x="368" y="24" width="168" height="76" rx="5"
+                    fill="none" stroke="var(--rule-strong)" stroke-width="1.25"/>
+              <text x="452" y="52" text-anchor="middle" font-size="13.5" font-weight="650" fill="var(--text)">3 · Ingest</text>
+              <text x="452" y="72" text-anchor="middle" font-size="11.5" fill="var(--text-muted)">Crawl, parse, hash,</text>
+              <text x="452" y="87" text-anchor="middle" font-size="11.5" fill="var(--text-muted)">deduplicate</text>
+            </g>
+            <g>
+              <rect x="548" y="24" width="168" height="76" rx="5"
+                    fill="var(--bg-sunken)" stroke="var(--accent)" stroke-width="1.5"/>
+              <text x="632" y="52" text-anchor="middle" font-size="13.5" font-weight="650" fill="var(--accent)">4 · Extract</text>
+              <text x="632" y="72" text-anchor="middle" font-size="11.5" fill="var(--text-muted)">One structured call</text>
+              <text x="632" y="87" text-anchor="middle" font-size="11.5" fill="var(--text-muted)">per document</text>
+            </g>
+            <g>
+              <rect x="728" y="24" width="168" height="76" rx="5"
+                    fill="none" stroke="var(--rule-strong)" stroke-width="1.25"/>
+              <text x="812" y="52" text-anchor="middle" font-size="13.5" font-weight="650" fill="var(--text)">5 · Export</text>
+              <text x="812" y="72" text-anchor="middle" font-size="11.5" fill="var(--text-muted)">Excel or Word,</text>
+              <text x="812" y="87" text-anchor="middle" font-size="11.5" fill="var(--text-muted)">flags highlighted</text>
+            </g>
+            <text x="452" y="140" text-anchor="middle" font-size="11.5" fill="var(--text-faint)">
+              Documents are processed in parallel; a failure on one never halts the run.
+            </text>
+          </g>
+        </svg>
+      </div>
+
+      <div class="prose">
+        <p>
+          The tool starts by asking for deal context. The user then puts in background and context
+          regarding the deal, so that the LLM can effectively reason about each document within the
+          correct context. This is similar to providing context to a junior when delegating work.
+          The user then defines the extraction scope. This is essentially analogous to defining the
+          columns in a diligence table. The scope includes the questions that you want answered from
+          each document, in the context of the deal. The deal context and the extraction scope are
+          compiled into the system prompt and sent with every document. Without that context an
+          instruction like "flag anything that cannot be assigned without consent" is ambiguous, and
+          the model has no basis on which to compare a clause against the deal. With it, the
+          governing-law column returns "State of Delaware (different from the primary governing law
+          of New York)" rather than just "Delaware".
+        </p>
+      </div>
+
+      <figure>
+        <img src="/assets/img/work/due-diligence-automation/02-deal-context.png"
+             alt="The deal context screen, with fields for deal type, target, acquirer, governing law and additional instructions">
+        <figcaption>Step 1. Deal parameters and free-text review instructions.</figcaption>
+      </figure>
+
+      <figure>
+        <img src="/assets/img/work/due-diligence-automation/03-scope.png"
+             alt="The scope definition screen, showing an editable table of ten extraction columns with descriptions">
+        <figcaption>
+          Step 2. Each row becomes a column in the output; the description tells the model what the
+          column means. An existing firm-standard table can be uploaded instead, and its column
+          headers are read out of the spreadsheet.
+        </figcaption>
+      </figure>
+
+      <div class="prose">
+        <p>
+          After giving the context and the extraction scope, the user points the tool at a folder
+          and the tool crawls through the folder, ingesting documents. In the ingestion phase, the
+          tool parses, hashes, and deduplicates the documents in the folder. Once it has ingested
+          all of the documents, it performs the analysis. This is done by sending each document
+          independently and in parallel to an LLM via an API call. The document is sent with prompts
+          built from the context and scope. Every extraction goes through the provider's
+          structured-output mechanism — tool use, function calling, or the equivalent — against a
+          JSON schema generated at runtime from the columns the user defined. The model also returns
+          confidence scores, allowing the lawyer reviewing the output to know where to focus their
+          review.
+        </p>
+        <p>
+          <strong>Provider abstraction.</strong> The tool is agnostic to the LLM provided for the reasonining. 
+          Anthropic, OpenAI or Gemini models can be used, or you can easily swap out for on-premise open-weights 
+          models. 
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="prose">
+        <h2>Output</h2>
+        <p>
+          Once the extraction and analysis is finished, the output can be exported as a table in Word
+          or Excel. Below shows an example of the output from a test corpus of ten synthetic documents 
+          — five third-party services agreements, and a master services agreement with four successive
+          amendments.
+        </p>
+      </div>
+
+      <figure>
+        <img src="/assets/img/work/due-diligence-automation/06-output.png"
+             alt="The output screen showing the completed due diligence table for ten documents">
+        <figcaption>One row per document, one column per extraction target.</figcaption>
+      </figure>
+
+      <div class="prose">
+        <p>Two cells from that run:</p>
+      </div>
+
+      <div class="table-scroll">
+        <table class="data">
+          <thead>
+            <tr><th>Document</th><th>Column</th><th>Extracted</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Nexus IT Services</td>
+              <td>Governing Law</td>
+              <td>State of Delaware (Flagged: Different from primary governing law of New York)</td>
+            </tr>
+            <tr>
+              <td>Nexus IT Services</td>
+              <td>Change of Control</td>
+              <td>
+                Client (Acme) may terminate immediately upon written notice if Vendor
+                undergoes a Change of Control (as defined in Section 1.2) and the
+                acquiring entity is a direct competitor of Client… For the transaction
+                (Acme's acquisition), Section 4.2 allows Acme to assign the Agreement
+                without Nexus's consent in connection with a merger or acquisition of
+                Acme, provided the assignee assumes all obligations.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="prose">
+        <p>
+          The second cell handles change of control in both directions — what happens if the
+          counterparty is acquired, and what happens if the client is — and cites the section for
+          each. That comes from the deal context supplied in step 1.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="prose">
+        <h2>How it was built</h2>
+        <p>
+          Built in Python with the help of Claude Code. 
+          Source is not public, but I am happy to walk through it.
+        </p>
+      </div>
+      <div class="btn-row">
+        <a class="btn" href="/prototypes/deal-spaces.html">Deal spaces →</a>
+        <a class="btn" href="/#contact">Get in touch</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>© Liam Peet-Paré</div>
+    <div><a href="/#prototypes">All prototypes</a></div>
+  </div>
+</footer>
+
+</body>
+</html>

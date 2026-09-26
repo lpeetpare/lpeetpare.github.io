@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Domain Portfolio Check · Liam Peet-Paré</title>
+<meta name="description" content="A WHOIS lookup tool for IP diligence: parallel queries across a list of domains, normalised into one table with a status per domain.">
+<script>(function(){try{var t=localStorage.getItem("theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<link rel="stylesheet" href="/assets/css/site.css">
+<script src="/assets/js/theme.js" defer></script>
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">
+      <img class="brand-mark aiw" src="/assets/img/aiw/hatter.jpg" alt="">
+      <span>Liam Peet-Paré</span>
+    </a>
+    <div class="header-right">
+      <nav class="nav">
+        <a href="/#prototypes" aria-current="page">Prototypes</a>
+        <a href="/#research">Research</a>
+        <a href="/writing.html">Writing</a>
+        <a href="/#contact">Contact</a>
+      </nav>
+      <button class="theme-toggle" type="button" aria-label="Switch theme" title="Switch theme">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.4v2.3M12 19.3v2.3M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.4 12h2.3M19.3 12h2.3M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <div class="wrap">
+    <div class="case-header">
+      <div class="case-head-grid">
+        <div class="prose">
+          <a class="backlink" href="/#prototypes">← Prototypes</a>
+          <p class="eyebrow">Prototype</p>
+          <h1>Domain Portfolio Check</h1>
+          <p class="lede">
+            A WHOIS lookup tool for IP diligence and brand portfolio review. You paste in or
+            upload a list of domains, and the tool queries each registry, normalises the responses
+            into a single table, and gives each domain a status based on how close it is to expiry.
+            The output exports to CSV or Excel. The tool is deterministic and does not call any LLMs.
+          </p>
+        </div>
+        <div class="case-motif">
+          <img class="aiw" src="/assets/img/aiw/painting-roses.jpg" alt="">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <dl class="factbox">
+      <div>
+        <dt>Input</dt>
+        <dd>A pasted or uploaded list of domains</dd>
+      </div>
+      <div>
+        <dt>Output</dt>
+        <dd>Status table, exported to CSV or Excel</dd>
+      </div>
+      <div>
+        <dt>Interfaces</dt>
+        <dd>Browser app and command line over the same core</dd>
+      </div>
+      <div>
+        <dt>Built</dt>
+        <dd>2026</dd>
+      </div>
+    </dl>
+  </div>
+
+  <section>
+    <div class="wrap">
+      <div class="prose">
+        <h2>Why I built it</h2>
+        <p>
+          Companies accumulate domains over time — the main site, typo variants, defensive
+          registrations, country-code versions, and whatever arrived with an acquisition. In the 
+          context of an M&amp;A transaction, someone has to run diligence on these domains to determine
+          what is held, through whom, and whether anything is close to lapsing. This is often done with 
+          manual WHOIS lookups across various registries. Doing a manual domain lookup for a hundred or so 
+          domains could easily take several hours. This tool does that work in minutes, with literally only 
+          seconds of human effort required.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="prose">
+        <h2>How it works</h2>
+        <p>
+          The user pastes a list of domains into the browser interface, or uploads a text or CSV
+          file. The tool parses these inputs, using regular expressions to ensure the domains are accurate
+          before sending them for lookup.
+        </p>
+        <p>
+          The lookups then run concurrently in a thread pool. Registries
+          rate-limit bulk querying, so the concurrency is configurable, and the default is set low
+          enough to be comfortable across a few hundred domains. A failure on one domain does not
+          stop the run.
+        </p>
+        <p>
+          The underlying WHOIS library tends to return messy output. For the same
+          conceptual field, a datetime, a list of datetimes, a bare string in one of several
+          formats, or nothing at all, could all be returned depending on which registry answered.
+          The tool passes every field through a coercion layer to standardize the output.
+        </p>
+        <p>
+          Each result is then reduced to a single status: OK, expiring within a configurable window,
+          expired, no expiry date published, or lookup failed. Several country-code registries do not publish expiry over
+          WHOIS at all, so these are left blank, whereas a failed lookup is worth retrying.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="prose">
+        <h2>Output</h2>
+        <p>
+          The results table colours each row by status, and the same colouring carries into the
+          Excel export. Below is an example run over seven domains.
+        </p>
+      </div>
+
+      <figure>
+        <img src="/assets/img/work/domain-check/02-results.png"
+             alt="The results table, with each row colour-coded by status and domains flagged as expiring">
+        <figcaption>A live run. Two domains fall inside the 90-day renewal window.</figcaption>
+      </figure>
+
+      <div class="table-scroll">
+        <table class="data">
+          <thead>
+            <tr>
+              <th>Domain</th><th>Registrant Organization</th><th>Registrar</th>
+              <th>Created</th><th>Expires</th><th>Days</th><th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>anthropic.com</td><td>Not present</td><td>MarkMonitor Inc.</td>
+              <td>2001-10-02</td><td>2033-10-02</td><td>2583</td><td>OK</td>
+            </tr>
+            <tr>
+              <td>openai.com</td><td>Not present</td><td>MarkMonitor Inc.</td>
+              <td>2007-01-19</td><td>2029-01-19</td><td>866</td><td>OK</td>
+            </tr>
+            <tr>
+              <td>wikipedia.org</td><td>Not present</td><td>MarkMonitor Inc.</td>
+              <td>2001-01-13</td><td>2027-01-13</td><td>129</td><td>OK</td>
+            </tr>
+            <tr>
+              <td>linkedin.com</td><td>LinkedIn Corporation</td><td>MarkMonitor, Inc.</td>
+              <td>2002-11-02</td><td>2026-11-02</td><td>57</td><td>Expiring</td>
+            </tr>
+            <tr>
+              <td>canada.ca</td><td>Shared Services Canada</td><td>Authentic Web Inc.</td>
+              <td>2002-11-25</td><td>2026-10-16</td><td>40</td><td>Expiring</td>
+            </tr>
+            <tr>
+              <td>bbc.co.uk</td><td>Not present</td><td>Not present</td>
+              <td>Not present</td><td>Not present</td><td>—</td><td>Lookup failed</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="prose">
+        <h2>How it was built</h2>
+        <p>
+          Built in Python with the help of Claude Code.
+          Source is not public, but I am happy to walk through it.
+        </p>
+      </div>
+      <div class="btn-row">
+        <a class="btn" href="/prototypes/whats-market.html">What's market? →</a>
+        <a class="btn" href="/#contact">Get in touch</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>© Liam Peet-Paré</div>
+    <div><a href="/#prototypes">All prototypes</a></div>
+  </div>
+</footer>
+
+</body>
+</html>

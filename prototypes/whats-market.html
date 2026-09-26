@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What's market? · Liam Peet-Paré</title>
+<meta name="description" content="A prototype that reads a corpus of public M&A agreements into structured deal terms, then benchmarks, compares and searches them.">
+<script>(function(){try{var t=localStorage.getItem("theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<link rel="stylesheet" href="/assets/css/site.css">
+<script src="/assets/js/theme.js" defer></script>
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">
+      <img class="brand-mark aiw" src="/assets/img/aiw/hatter.jpg" alt="">
+      <span>Liam Peet-Paré</span>
+    </a>
+    <div class="header-right">
+      <nav class="nav">
+        <a href="/#prototypes" aria-current="page">Prototypes</a>
+        <a href="/#research">Research</a>
+        <a href="/writing.html">Writing</a>
+        <a href="/#contact">Contact</a>
+      </nav>
+      <button class="theme-toggle" type="button" aria-label="Switch theme" title="Switch theme">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.4v2.3M12 19.3v2.3M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.4 12h2.3M19.3 12h2.3M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <div class="wrap">
+    <div class="case-header">
+      <div class="case-head-grid">
+        <div class="prose">
+          <a class="backlink" href="/#prototypes">← Prototypes</a>
+          <p class="eyebrow">Prototype</p>
+          <h1>What's market?</h1>
+          <p class="lede">
+            A tool that reads a large corpus of public M&amp;A agreements and reduces each deal to a
+            structured record of its terms, with every term tied to the passage it came from. Once
+            the deals are in that form they can be filtered, benchmarked against one another,
+            compared side by side, and searched by meaning. The tool ingests agreements and associated 
+            filings and extracts information concerning the deal. The prototype is built on public M&amp;A 
+            documents, but could just as easily work on local copies of private deals.
+          </p>
+        </div>
+        <div class="case-motif">
+          <img class="aiw" src="/assets/img/aiw/alice-door.jpg" alt="">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <dl class="factbox">
+      <div>
+        <dt>Input</dt>
+        <dd>Public M&amp;A agreements and filings (SEC EDGAR)</dd>
+      </div>
+      <div>
+        <dt>Output</dt>
+        <dd>Structured deal terms, market analytics, cited clause search</dd>
+      </div>
+      <div>
+        <dt>Prototype Corpus</dt>
+        <dd>486 transactions, 2020–2024</dd>
+      </div>
+      <div>
+        <dt>Built</dt>
+        <dd>2026</dd>
+      </div>
+    </dl>
+  </div>
+
+  <section>
+    <div class="wrap">
+      <div class="prose">
+        <h2>Why I built it</h2>
+        <p>
+          Law firms generally do not have strong analytics on what is market across a range of deals 
+          and rely heavily on institutional memory and knowledge. This tool allows for on-demand analytics 
+          regarding what is market for transactions and is filterable across any dimension. It provides 
+          a rich data interface for agreements that are otherwise just walls of text. It also enables 
+          much more sophisticated and faster searches for precedents.
+        </p>
+        <p>
+          The tool ingests the corpus once and extracts structured data that can then be leveraged. 
+          The result is a dataset in which
+          every deal has the same fields, so a question like "what is the median termination fee on
+          private equity buyouts of public targets" becomes a filter and a chart rather than a
+          research assignment. Because every value is tied back to the clause it came from, a
+          number can be checked against the actual language rather than taken on trust.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="prose">
+        <h2>What it does</h2>
+        <p>
+          The main view is a dashboard over the corpus. The filters on the left define a cohort —
+          transaction structure, acquirer type, target ownership, indemnity regime, deal size,
+          vintage, industry — and every panel recomputes against the selection. Clicking a segment
+          in any chart narrows the cohort further.
+        </p>
+      </div>
+
+      <figure>
+        <img src="/assets/img/work/whats-market/01-analytics.png"
+             alt="The analytics dashboard over all 486 transactions: summary figures, deal structure, acquirer type and indemnity regime donuts, deal value and termination fee distributions, deal protection terms">
+        <figcaption>The full corpus.</figcaption>
+      </figure>
+
+      <figure>
+        <img src="/assets/img/work/whats-market/02-analytics-cohort.png"
+             alt="The same dashboard filtered to the 36 private equity acquirers, with every panel recomputed">
+        <figcaption>The same view narrowed to private equity acquirers.</figcaption>
+      </figure>
+
+      <div class="prose">
+        <p>
+          Benchmark places a single deal against the cohort. For each term it shows where that deal
+          sits: for numeric terms, its percentile against the cohort median and interquartile range;
+          for categorical terms, how the cohort is distributed and which category the deal falls
+          into.
+        </p>
+      </div>
+
+      <figure>
+        <img src="/assets/img/work/whats-market/03-benchmark.png"
+             alt="The benchmark view for one deal, showing deal value, headline price and price per share as dots on percentile bars, and consideration terms as highlighted categories">
+        <figcaption>One deal's economics against the corpus.</figcaption>
+      </figure>
+
+      <figure>
+        <img src="/assets/img/work/whats-market/04-benchmark-termination.png"
+             alt="The same deal's termination fee, reverse termination fee and expense reimbursement against the cohort, followed by its indemnity terms">
+        <figcaption>The same deal's termination and indemnity terms.</figcaption>
+      </figure>
+
+      <div class="prose">
+        <p>
+          Compare puts up to five deals side by side, field by field, with an option to show only
+          the fields on which they differ.
+        </p>
+      </div>
+
+      <figure>
+        <img src="/assets/img/work/whats-market/05-compare.png"
+             alt="Three deals compared side by side in a table, one column per deal, one row per field">
+        <figcaption>Three deals compared.</figcaption>
+      </figure>
+
+      <div class="prose">
+        <p>
+          Search runs across every clause in the underlying agreements, by meaning, by keyword, or
+          both, and returns the passages themselves with a reference to the source document. It is
+          the fastest way to find precedent language for a term once the analytics have shown what
+          is typical.
+        </p>
+      </div>
+
+      <figure>
+        <img src="/assets/img/work/whats-market/07-search.png"
+             alt="Search results for a plain-language query about reverse termination fees, each result a verbatim passage from an agreement with its source filing noted below">
+        <figcaption>Clause search, returning the agreement language itself.</figcaption>
+      </figure>
+
+      <div class="prose">
+        <p>
+          The deal map places every transaction as a point in space, with similar deals near one
+          another. It can be coloured by any category, and clicking a deal lists its nearest
+          neighbours.
+        </p>
+      </div>
+
+      <figure>
+        <img src="/assets/img/work/whats-market/06-deal-map.png"
+             alt="A three-dimensional scatter of 486 deals, coloured by transaction structure, with similar deals clustered together">
+        <figcaption>The deal map, coloured by transaction structure.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="prose">
+        <h2>How it was built</h2>
+        <p>
+          Built in Python and React with the help of Claude Code.
+          Source is not public, but I am happy to walk through it.
+        </p>
+      </div>
+      <div class="btn-row">
+        <a class="btn" href="/prototypes/due-diligence-automation.html">Due diligence automation →</a>
+        <a class="btn" href="/#contact">Get in touch</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>© Liam Peet-Paré</div>
+    <div><a href="/#prototypes">All prototypes</a></div>
+  </div>
+</footer>
+
+</body>
+</html>
